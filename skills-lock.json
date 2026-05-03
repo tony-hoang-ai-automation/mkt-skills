@@ -1,10 +1,40 @@
 {
   "version": 1,
   "skills": {
+    "claude-design-hyperframes": {
+      "source": "heygen-com/hyperframes",
+      "sourceType": "github",
+      "computedHash": "db807ef19570ae6815e0ce889bd0c0f5c9cac88f25680e49c3e961fbdc1c8a8f"
+    },
+    "gsap": {
+      "source": "heygen-com/hyperframes",
+      "sourceType": "github",
+      "computedHash": "dfbf5933e83bdd30a07dcfac67e7c87f9040cf1e09af4bfd14f610c7caeb0893"
+    },
     "heygen": {
       "source": "heygen-com/skills",
       "sourceType": "github",
       "computedHash": "e2c5db9c36904294497fcd18ee4f003cdf0f79746d46a57f1cc352d83957018f"
+    },
+    "hyperframes": {
+      "source": "heygen-com/hyperframes",
+      "sourceType": "github",
+      "computedHash": "205b27925a7530136f28caddc519ad2f491811f7a2fed7dffb5a4d06f91c4567"
+    },
+    "hyperframes-cli": {
+      "source": "heygen-com/hyperframes",
+      "sourceType": "github",
+      "computedHash": "04df167a30050a770aac29d0e9b3a953b31c9839f5b4c8c47839ded4f7d87e68"
+    },
+    "hyperframes-registry": {
+      "source": "heygen-com/hyperframes",
+      "sourceType": "github",
+      "computedHash": "141fcd863a1a02117706712508e8b0df407c3d0ff36e5863123fa4ce2defd14d"
+    },
+    "website-to-hyperframes": {
+      "source": "heygen-com/hyperframes",
+      "sourceType": "github",
+      "computedHash": "bca70ed33503e4227dd172d92685bf1cbc485ce3be8b5f5a0bfc72ee4bd400f1"
     }
   }
 }

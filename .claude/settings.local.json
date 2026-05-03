@@ -83,10 +83,19 @@
       "Bash(chmod +x .claude/skills/mkt-ideas-to-script-notion/scripts/push_to_notion.py)",
       "Bash(uvx --help)",
       "Bash(claude mcp *)",
-      "Bash(awk '/^[0-9]+$/ {next} /-->/ {next} /^$/ {next} {print}')"
+      "Bash(awk '/^[0-9]+$/ {next} /-->/ {next} /^$/ {next} {print}')",
+      "Bash(mdls -name kMDItemNumberOfPages \"/Users/tonyhoang/Documents/GitHub/hoang-ai-marketing/Going-Viral-Guide-Free-Version-1.pdf\")",
+      "Edit(/.claude/skills/mkt-kane-reels-visual-metaphor/**)",
+      "Edit(/.claude/skills/mkt-kane-reels-jenga-tension/**)",
+      "Edit(/.claude/skills/mkt-kane-reels-is-it-worth-it/**)",
+      "Edit(/.claude/skills/mkt-kane-youtube-30-day-challenge/**)",
+      "Edit(/.claude/skills/mkt-kane-youtube-jenga-longform/**)"
     ],
     "deny": [],
-    "ask": []
+    "ask": [],
+    "additionalDirectories": [
+      "/Users/tonyhoang/Documents/GitHub/hoang-ai-marketing/.claude/skills/mkt-kane-youtube-jenga-longform"
+    ]
   },
   "enabledPlugins": {
     "discord@claude-plugins-official": true

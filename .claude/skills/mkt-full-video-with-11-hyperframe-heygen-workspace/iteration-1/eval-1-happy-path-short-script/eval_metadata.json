@@ -1,0 +1,17 @@
+{
+  "eval_id": 1,
+  "eval_name": "happy-path-short-script",
+  "prompt": "Chạy full video pipeline cho script ngắn (smoke test). Auto-approve checkpoint MP3 — không stop đợi user.",
+  "assertions": [
+    {"text": "Phase 1 — voiceover.mp3 được tạo trong workspace folder", "category": "phase-1"},
+    {"text": "MP3 duration > 0 và < 60s (script ngắn)", "category": "phase-1"},
+    {"text": "Pipeline reach checkpoint với format đúng (path + duration + size hiển thị)", "category": "checkpoint"},
+    {"text": "Phase 2 — source.mp4 được tạo từ HeyGen MCP (không curl REST)", "category": "phase-2"},
+    {"text": "source.mp4 9:16 aspect ratio (720x1280)", "category": "phase-2"},
+    {"text": "Phase 3 — HF project files được tạo (transcript.json, caption-groups.json, scenes.json, index.html)", "category": "phase-3"},
+    {"text": "Phase 3 — sub-comp files được tạo (compositions/captions.html + at least 1 scene)", "category": "phase-3"},
+    {"text": "Phase 3 — sfx/ folder có ít nhất 1 file SFX", "category": "phase-3"},
+    {"text": "Final report theo format đúng — báo Studio URL + workspace path", "category": "handoff"},
+    {"text": "Naming convention chính xác — voiceover.mp3 + source.mp4 (KHÔNG đổi tên)", "category": "convention"}
+  ]
+}

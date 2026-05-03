@@ -1,0 +1,977 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>DeepSeek V4 + Claude Code — Same workflow. Hundreds × less money.</title>
+<meta name="description" content="Cách kết hợp DeepSeek V4 với Claude Code để giảm chi phí coding hàng chục lần — vẫn giữ trải nghiệm Claude Code." />
+
+<script src="https://cdn.tailwindcss.com?plugins=typography,forms"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      fontFamily: {
+        sans: ['Inter', 'system-ui', 'sans-serif'],
+        mono: ['"JetBrains Mono"', 'monospace'],
+        serif: ['"Instrument Serif"', 'serif'],
+      },
+      colors: {
+        ink: {
+          950: '#07070a',
+          900: '#0b0b10',
+          800: '#111119',
+          700: '#1a1a25',
+          600: '#262633',
+          500: '#3a3a4a',
+        },
+        claude: {
+          DEFAULT: '#DA7756',
+          50:  '#fbeee7',
+          100: '#f6dccd',
+          200: '#edb89c',
+          300: '#e3946c',
+          400: '#da7756',
+          500: '#c45f3d',
+          600: '#9a4a30',
+          700: '#6e3422',
+        },
+        deepseek: {
+          DEFAULT: '#4D6BFE',
+          50:  '#eaeefe',
+          100: '#d4ddfd',
+          200: '#a9bbfb',
+          300: '#7e98f9',
+          400: '#4d6bfe',
+          500: '#3b53cc',
+          600: '#2a3d99',
+          700: '#1a2666',
+        },
+        accent: {
+          green: '#3FCF8E',
+          purple: '#A78BFA',
+          amber: '#F4B860',
+        }
+      },
+      letterSpacing: {
+        tightest: '-0.04em',
+      },
+    }
+  }
+};
+</script>
+
+<style>
+  :root { color-scheme: dark; }
+  html { scroll-behavior: smooth; }
+  body {
+    background:
+      radial-gradient(1200px 600px at 50% -200px, rgba(218,119,86,0.10), transparent 60%),
+      radial-gradient(900px 500px at 90% 30%, rgba(77,107,254,0.08), transparent 60%),
+      #07070a;
+    color: #ECECEF;
+    font-feature-settings: "ss01", "cv11";
+  }
+  .grain::before {
+    content:""; position: fixed; inset:0; pointer-events:none; opacity:.035; z-index:0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.5 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* ===== Vertical connector line between sections ===== */
+  .connector {
+    position: relative;
+    height: 180px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .connector::before {
+    content:"";
+    position:absolute; left:50%; top:0; bottom:0;
+    width:1px; transform: translateX(-0.5px);
+    background: linear-gradient(to bottom,
+      rgba(255,255,255,0) 0%,
+      rgba(218,119,86,0.55) 25%,
+      rgba(77,107,254,0.55) 75%,
+      rgba(255,255,255,0) 100%);
+    box-shadow: 0 0 18px rgba(218,119,86,0.25);
+  }
+  .connector .badge {
+    position: relative; z-index: 1;
+  }
+
+  /* small dotted line for sub-dividers inside a section */
+  .vline {
+    width:1px; height: 80px; margin: 0 auto;
+    background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0.18), rgba(255,255,255,0));
+  }
+
+  /* Section badge pill */
+  .badge {
+    display:inline-flex; align-items:center; gap:.6rem;
+    padding:.45rem 1rem;
+    border-radius: 999px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px; letter-spacing: .14em;
+    border:1px solid rgba(255,255,255,0.12);
+    background: rgba(20,20,28,0.7);
+    backdrop-filter: blur(8px);
+    color:#cfcfd6;
+  }
+  .badge .dot { width:8px; height:8px; border-radius: 999px; }
+
+  /* Highlight gradients for keywords */
+  .grad-claude {
+    background: linear-gradient(90deg, #F2A07A 0%, #DA7756 50%, #C25A38 100%);
+    -webkit-background-clip: text; background-clip:text; color: transparent;
+  }
+  .grad-deepseek {
+    background: linear-gradient(90deg, #8FA4FF 0%, #4D6BFE 60%, #2C46C9 100%);
+    -webkit-background-clip: text; background-clip:text; color: transparent;
+  }
+  .grad-green {
+    background: linear-gradient(90deg, #6EE7B7 0%, #3FCF8E 60%, #18A06A 100%);
+    -webkit-background-clip: text; background-clip:text; color: transparent;
+  }
+  .grad-amber {
+    background: linear-gradient(90deg, #F8D389 0%, #F4B860 60%, #D08A2A 100%);
+    -webkit-background-clip: text; background-clip:text; color: transparent;
+  }
+  .grad-purple {
+    background: linear-gradient(90deg, #C4B5FD 0%, #A78BFA 60%, #7C3AED 100%);
+    -webkit-background-clip: text; background-clip:text; color: transparent;
+  }
+
+  /* Big display heading */
+  .display {
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    line-height: 0.98;
+  }
+
+  /* Card */
+  .card {
+    border: 1px solid rgba(255,255,255,0.08);
+    background: linear-gradient(180deg, rgba(20,20,28,0.6) 0%, rgba(12,12,18,0.6) 100%);
+    border-radius: 18px;
+    backdrop-filter: blur(8px);
+  }
+  .card-hover { transition: transform .25s ease, border-color .25s ease, background .25s ease; }
+  .card-hover:hover { border-color: rgba(255,255,255,0.18); transform: translateY(-2px); }
+
+  /* Pill (top of hero) */
+  .pill {
+    display:inline-flex; align-items:center; gap:.55rem;
+    padding:.5rem 1rem;
+    border-radius: 999px;
+    border:1px solid rgba(255,255,255,0.12);
+    background: rgba(18,18,26,0.7);
+    backdrop-filter: blur(10px);
+    font-size: 13.5px; color:#E8E8EC;
+    font-weight: 500;
+  }
+  .pill svg { width:16px; height:16px; }
+
+  /* Image placeholder block */
+  .ph {
+    border: 1.5px dashed rgba(255,255,255,0.18);
+    background:
+      repeating-linear-gradient(45deg, rgba(255,255,255,0.015) 0 12px, rgba(255,255,255,0) 12px 24px),
+      radial-gradient(800px 300px at 50% 50%, rgba(218,119,86,0.06), transparent 70%),
+      rgba(12,12,18,0.6);
+    border-radius: 22px;
+    position:relative;
+  }
+  .ph .ph-tag {
+    position:absolute; top: 18px; left: 18px;
+    font-family: "JetBrains Mono", monospace; font-size: 11px;
+    letter-spacing: .14em;
+    color: #DA7756;
+    background: rgba(0,0,0,0.55);
+    border:1px solid rgba(218,119,86,0.4);
+    padding: .35rem .65rem;
+    border-radius: 999px;
+  }
+  .ph .ph-aspect {
+    position:absolute; top: 18px; right: 18px;
+    font-family: "JetBrains Mono", monospace; font-size: 11px;
+    letter-spacing: .14em; color:#9aa0aa;
+    background: rgba(0,0,0,0.45);
+    border:1px solid rgba(255,255,255,0.1);
+    padding: .35rem .65rem; border-radius: 999px;
+  }
+  .ph .ph-center {
+    position:absolute; inset:0; display:flex; flex-direction:column;
+    align-items:center; justify-content:center;
+    color: rgba(255,255,255,0.55); text-align:center; padding: 24px;
+  }
+  .ph .ph-center .icon-box {
+    width: 56px; height: 56px; border-radius: 14px;
+    background: rgba(218,119,86,0.12);
+    border: 1px solid rgba(218,119,86,0.35);
+    display:flex; align-items:center; justify-content:center; margin-bottom: 14px;
+  }
+  .prompt-box {
+    border:1px solid rgba(255,255,255,0.08);
+    background: rgba(8,8,12,0.7);
+    border-radius: 14px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12.5px;
+    line-height: 1.65;
+    color:#cfcfd6;
+  }
+  .prompt-box .label {
+    color:#DA7756; font-size:11px; letter-spacing:.16em;
+  }
+
+  /* Code block */
+  .code {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 13.5px; line-height: 1.7;
+    background: #07070a;
+    border:1px solid rgba(255,255,255,0.08);
+    border-radius: 14px;
+    color:#E1E1E6;
+  }
+  .code .c-prompt { color:#5b5b66; }
+  .code .c-cmd { color:#fff; }
+  .code .c-com { color:#6c6c78; }
+  .code .c-str { color:#F4B860; }
+  .code .c-key { color:#DA7756; }
+  .code .c-num { color:#3FCF8E; }
+  .code .c-blue { color:#8FA4FF; }
+
+  /* Step card number */
+  .step-num {
+    font-family: "Instrument Serif", serif;
+    font-style: italic;
+    font-size: 56px; line-height: 1;
+    background: linear-gradient(180deg, #DA7756 0%, rgba(218,119,86,0.2) 100%);
+    -webkit-background-clip: text; background-clip:text; color: transparent;
+  }
+
+  /* compare check / cross */
+  .chip-good { color:#6EE7B7; background: rgba(63,207,142,0.08); border:1px solid rgba(63,207,142,0.25); }
+  .chip-bad  { color:#F87171; background: rgba(248,113,113,0.08); border:1px solid rgba(248,113,113,0.25); }
+  .chip-neutral { color:#cfcfd6; background: rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.1); }
+
+  /* nav */
+  .nav-link { color:#cfcfd6; transition: color .2s; }
+  .nav-link:hover { color:#fff; }
+
+  /* subtle vertical orbit */
+  .orbit {
+    position:absolute; pointer-events:none; opacity:.55;
+    background:
+      radial-gradient(closest-side, rgba(77,107,254,0.18), transparent 70%),
+      radial-gradient(closest-side, rgba(218,119,86,0.18), transparent 70%);
+    filter: blur(40px);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+  }
+</style>
+</head>
+
+<body class="grain antialiased">
+
+<!-- ============== NAV ============== -->
+<header class="fixed top-4 inset-x-4 z-50 flex justify-center pointer-events-none">
+  <nav class="pointer-events-auto flex items-center gap-2 px-3 py-2 rounded-full border border-white/10 bg-ink-900/70 backdrop-blur-xl">
+    <a href="#hero" class="flex items-center gap-2 pl-2 pr-3 py-1.5">
+      <span class="w-6 h-6 rounded-md bg-claude/20 border border-claude/40 flex items-center justify-center">
+        <span class="w-2 h-2 rounded-full bg-claude"></span>
+      </span>
+      <span class="text-sm font-semibold tracking-tight">DeepSeek × Claude Code</span>
+    </a>
+    <span class="hidden md:flex items-center gap-1 text-[13px] ml-2">
+      <a class="nav-link px-3 py-1.5 rounded-full hover:bg-white/5" href="#model">Model</a>
+      <a class="nav-link px-3 py-1.5 rounded-full hover:bg-white/5" href="#savings">Tiết kiệm</a>
+      <a class="nav-link px-3 py-1.5 rounded-full hover:bg-white/5" href="#benchmarks">Benchmark</a>
+      <a class="nav-link px-3 py-1.5 rounded-full hover:bg-white/5" href="#setup">Cách dùng</a>
+      <a class="nav-link px-3 py-1.5 rounded-full hover:bg-white/5" href="#start">Bắt đầu</a>
+    </span>
+    <a href="#start" class="ml-1 hidden sm:inline-flex items-center gap-1.5 cursor-pointer pl-3 pr-3 py-1.5 rounded-full bg-white text-ink-900 text-[13px] font-semibold hover:bg-white/90 transition-colors">
+      Cài ngay
+      <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+    </a>
+  </nav>
+</header>
+
+<main class="relative z-10">
+
+<!-- ============== HERO ============== -->
+<section id="hero" class="relative pt-40 pb-24 sm:pt-48 sm:pb-32 px-6">
+  <div class="orbit w-[520px] h-[520px] left-[-120px] top-[80px]"></div>
+  <div class="orbit w-[520px] h-[520px] right-[-120px] top-[160px]"></div>
+
+  <div class="max-w-6xl mx-auto text-center">
+
+    <!-- Pills row -->
+    <div class="flex flex-wrap items-center justify-center gap-2.5 mb-12">
+      <span class="pill">
+        <span class="w-4 h-4 rounded-md bg-deepseek/20 border border-deepseek/50 flex items-center justify-center">
+          <span class="w-1.5 h-1.5 rounded-full bg-deepseek"></span>
+        </span>
+        <span class="text-deepseek-200">DeepSeek V4 Pro</span>
+      </span>
+      <span class="pill">
+        <span class="w-4 h-4 rounded-md bg-claude/20 border border-claude/50 flex items-center justify-center">
+          <span class="w-1.5 h-1.5 rounded-full bg-claude"></span>
+        </span>
+        <span class="text-claude-100">Claude Code</span>
+      </span>
+      <span class="pill">
+        <i data-lucide="github" class="w-4 h-4 text-white/70"></i>
+        <span>free-claude-code · 16.5k★</span>
+      </span>
+      <span class="pill">
+        <span class="w-4 h-4 rounded-md bg-emerald-500/15 border border-emerald-500/40 flex items-center justify-center">
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+        </span>
+        <span class="text-emerald-300">+ Codex review</span>
+      </span>
+    </div>
+
+    <h1 class="display text-white text-[44px] sm:text-7xl md:text-8xl lg:text-[120px]">
+      <span class="grad-deepseek">DeepSeek V4</span><span class="text-white/40">  +  </span><br class="sm:hidden"/>
+      <span class="grad-claude">Claude Code</span>
+    </h1>
+
+    <p class="mt-10 display text-3xl sm:text-5xl md:text-6xl text-white/95">
+      Same workflow.
+      <br/>
+      <span class="grad-amber">3000×</span> less <span class="grad-amber">money</span>.
+    </p>
+
+    <p class="mt-8 max-w-2xl mx-auto text-base sm:text-lg text-white/65 leading-relaxed">
+      Vẫn là <span class="text-claude-200 font-medium">Claude Code</span> mà anh đang dùng hằng ngày — chỉ thay
+      <span class="text-deepseek-200 font-medium">backend model</span> bằng DeepSeek V4 qua một local proxy nhỏ gọn.
+      Chi phí <span class="text-amber-300 font-medium">/session 4 tiếng</span> giảm từ <span class="text-white">$62.50</span> xuống <span class="text-white">$0.02</span>.
+    </p>
+
+    <div class="mt-10 flex flex-col sm:flex-row items-center justify-center gap-3">
+      <a href="#start" class="cursor-pointer inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-white text-ink-900 font-semibold hover:bg-white/90 transition-colors">
+        Bắt đầu trong 2 phút
+        <i data-lucide="arrow-right" class="w-4 h-4"></i>
+      </a>
+      <a href="#benchmarks" class="cursor-pointer inline-flex items-center gap-2 px-6 py-3.5 rounded-full border border-white/15 hover:border-white/30 transition-colors text-white/90">
+        <i data-lucide="bar-chart-3" class="w-4 h-4"></i>
+        Xem benchmark
+      </a>
+    </div>
+
+    <!-- micro-cta meta -->
+    <div class="mt-8 flex items-center justify-center gap-5 text-[13px] text-white/45 font-mono">
+      <span class="inline-flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400"></i> open weights</span>
+      <span class="inline-flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400"></i> 1M context</span>
+      <span class="inline-flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400"></i> MIT license</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============== CONNECTOR ============== -->
+<div class="connector"></div>
+
+<!-- ============== 01 · THE MODEL ============== -->
+<section id="model" class="px-6">
+  <div class="max-w-6xl mx-auto text-center">
+
+    <span class="badge"><span class="dot bg-deepseek"></span> 01 · THE MODEL</span>
+
+    <h2 class="mt-8 display text-white text-5xl sm:text-7xl md:text-[88px]">
+      What <span class="grad-deepseek">DeepSeek V4</span> is
+    </h2>
+
+    <p class="mt-8 max-w-2xl mx-auto text-lg text-white/65 leading-relaxed">
+      Một model <span class="text-white">open-weight Mixture-of-Experts</span> đã âm thầm bắt kịp Claude
+      về coding — với chi phí chỉ <span class="grad-amber font-semibold">1/30</span> mức thông thường.
+    </p>
+
+    <!-- 3 stats cards -->
+    <div class="mt-16 grid grid-cols-1 md:grid-cols-3 gap-5">
+      <div class="card card-hover p-8 text-left">
+        <div class="font-mono text-[11px] tracking-[.18em] text-deepseek-200 mb-6">// PARAMETERS</div>
+        <div class="flex items-baseline gap-1">
+          <div class="display text-7xl grad-deepseek">1.6T</div>
+        </div>
+        <div class="mt-4 text-white font-semibold">Total parameters</div>
+        <div class="mt-1.5 text-sm text-white/55 font-mono">49B active per token (MoE)</div>
+      </div>
+
+      <div class="card card-hover p-8 text-left">
+        <div class="font-mono text-[11px] tracking-[.18em] text-emerald-300 mb-6">// CONTEXT</div>
+        <div class="flex items-baseline gap-1">
+          <div class="display text-7xl grad-green">1M</div>
+        </div>
+        <div class="mt-4 text-white font-semibold">Context window</div>
+        <div class="mt-1.5 text-sm text-white/55 font-mono">hybrid attention, full-repo aware</div>
+      </div>
+
+      <div class="card card-hover p-8 text-left">
+        <div class="font-mono text-[11px] tracking-[.18em] text-amber-300 mb-6">// LICENSE</div>
+        <div class="flex items-baseline gap-1">
+          <div class="display text-7xl grad-amber">MIT</div>
+        </div>
+        <div class="mt-4 text-white font-semibold">Open weights</div>
+        <div class="mt-1.5 text-sm text-white/55 font-mono">Anthropic-compatible API surface</div>
+      </div>
+    </div>
+
+    <!-- supporting bullets -->
+    <div class="mt-12 grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-4 text-left max-w-5xl mx-auto">
+      <div class="flex gap-3">
+        <i data-lucide="cpu" class="w-5 h-5 text-deepseek-300 mt-0.5 shrink-0"></i>
+        <p class="text-sm text-white/70 leading-relaxed">MoE architecture — chỉ kích hoạt 49B parameter mỗi token, throughput cao mà cost thấp.</p>
+      </div>
+      <div class="flex gap-3">
+        <i data-lucide="layers" class="w-5 h-5 text-emerald-400 mt-0.5 shrink-0"></i>
+        <p class="text-sm text-white/70 leading-relaxed">Context 1M token — đủ nhét nguyên repo trung bình vào 1 turn, không cần chunking.</p>
+      </div>
+      <div class="flex gap-3">
+        <i data-lucide="unlock" class="w-5 h-5 text-amber-300 mt-0.5 shrink-0"></i>
+        <p class="text-sm text-white/70 leading-relaxed">License MIT — self-host được trên server riêng, không lo data leakage.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============== CONNECTOR ============== -->
+<div class="connector"></div>
+
+<!-- ============== 02 · THE SAVINGS ============== -->
+<section id="savings" class="px-6">
+  <div class="max-w-6xl mx-auto text-center">
+
+    <span class="badge"><span class="dot bg-claude"></span> 02 · THE SAVINGS</span>
+
+    <h2 class="mt-8 display text-white text-5xl sm:text-7xl md:text-[88px]">
+      Same workflow.<br/>
+      <span class="grad-claude">3000×</span> less money.
+    </h2>
+
+    <p class="mt-8 max-w-2xl mx-auto text-lg text-white/65 leading-relaxed">
+      Số liệu thật, không phải benchmark. Một <span class="text-white font-medium">phiên coding 4 tiếng</span> điển hình
+      với Claude Opus 4 ngốn khoảng <span class="text-claude-200 font-mono">$62.50</span>.
+      Cùng tác vụ đó qua DeepSeek V4 chỉ tốn <span class="text-emerald-300 font-mono">$0.02</span>.
+    </p>
+
+    <!-- placeholder image: infographic THE MATH -->
+    <div class="mt-14 ph aspect-[16/10] max-w-5xl mx-auto">
+      <span class="ph-tag">▮ IMAGE PLACEHOLDER #1 — phep-tinh-infographic.png</span>
+      <span class="ph-aspect">16 : 10</span>
+      <div class="ph-center">
+        <div class="icon-box"><i data-lucide="image" class="w-7 h-7 text-claude"></i></div>
+        <div class="font-serif italic text-2xl text-white/80 mb-2">PHÉP TÍNH — Cùng workflow, hai mức giá</div>
+        <div class="font-mono text-xs text-white/40 max-w-md">
+          Infographic flat-vector visual thinking: heo đất Claude vỡ ($62,50/phiên) → mũi tên ×3000 → két sắt nhỏ DeepSeek ($0,02/phiên)
+        </div>
+      </div>
+    </div>
+
+    <!-- copy button for image #1 prompt -->
+    <div class="mt-6 flex justify-center">
+      <button onclick="copyText('p1', event)" class="cursor-pointer inline-flex items-center gap-2 text-[13px] text-white/75 hover:text-white border border-white/15 hover:border-white/30 px-4 py-2.5 rounded-full transition-colors">
+        <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+        Copy prompt — IMAGE #1
+      </button>
+      <p id="p1" class="sr-only" aria-hidden="true">Editorial infographic in Claude AI signature style, 16:10 aspect ratio. Warm cream background (#F0EEE6) with very subtle paper grain — modern matte cream like Claude AI's marketing pages, NOT parchment, NOT vintage, NOT aged texture. Hand-drawn but clean and confident line illustrations with subtle warm color fills, like a thoughtful New Yorker spot illustration. Generous whitespace, considered composition, friendly intelligent feel.
+
+ALL on-image text in VIETNAMESE WITH FULL DIACRITICS — only brand names (CLAUDE OPUS, DEEPSEEK V4, MIT) and currency/math symbols ($, %, ×, ₫) stay in English.
+
+TYPOGRAPHY:
+• Title in bold modern serif-sans hybrid (Tiempos Headline / Inter Display feel), dark slate text: "PHÉP TÍNH — Cùng một workflow, hai mức giá".
+• Subtitle below in lighter weight grey: "Một phiên coding 4 tiếng, tính bằng tiền thật".
+• Annotation labels in neat sans-serif, dark slate ink with handwritten warmth.
+
+LEFT BLOCK (Claude side, accent CLAUDE ORANGE #DA7756):
+• Small pill at top: "CLAUDE OPUS" — orange fill, white text.
+• Hand-drawn cracked piggy bank illustration: pinkish-orange fill with confident black outline, exaggerated cracks as geometric breaks, golden coins (with $ and ₫ symbols) tumbling out into a small messy pile. Visual-thinking metaphor: "đốt tiền".
+• Big bold dark slate digits underneath: "$62,50" with caption "/ phiên 4 tiếng".
+• 3 hand-drawn annotation tags with thin curved arrow connectors:
+   – "Đắt nhất phân khúc"
+   – "Mỗi phiên ≈ một bữa nhà hàng"
+   – "Hoá đơn cuối tháng phồng to"
+
+CENTER:
+• Big bold orange chevron arrow pointing right, with "×3000" inside in white sans-serif.
+• Above the arrow, a green hand-drawn pill: "TIẾT KIỆM 99,97%".
+• Below the arrow, small caption: "Cùng tác vụ — chỉ đổi backend model".
+
+RIGHT BLOCK (DeepSeek side, accent DEEPSEEK BLUE #4D6BFE):
+• Small pill at top: "DEEPSEEK V4" — blue fill, white text.
+• Hand-drawn small treasure chest illustration: cool blue-grey fill with brass corner accents, intact and modest, with ONE single gold coin balanced neatly on top. Beside it a tiny minimal blue whale icon (DeepSeek mascot). Visual-thinking metaphor: "gọn nhẹ, tiết kiệm".
+• Big bold dark slate digits underneath: "$0,02" with caption "/ phiên 4 tiếng".
+• 3 hand-drawn annotation tags:
+   – "Rẻ tới mức làm tròn về 0"
+   – "Open-weight, MIT license"
+   – "Chạy local cũng được"
+
+BOTTOM:
+• Footnote in small grey text: "* Ước tính trên 1,5 triệu token input + 300 nghìn token output mỗi phiên".
+
+Visual style: hand-drawn editorial line illustration, warm and intelligent — Claude AI marketing aesthetic. Confident strokes on warm cream paper, modern minimal feel. Palette: cream background (#F0EEE6), dark slate text, Claude orange (#DA7756) accents, DeepSeek blue (#4D6BFE) accents, accent green (#3FCF8E) for the savings badge, gold for coins. Friendly, considered, modern.</p>
+    </div>
+
+    <!-- 2 mini stats -->
+    <div class="mt-10 grid grid-cols-1 sm:grid-cols-3 gap-5 max-w-4xl mx-auto text-left">
+      <div class="card p-6">
+        <div class="font-mono text-[11px] tracking-[.18em] text-claude-200 mb-3">// CLAUDE OPUS</div>
+        <div class="display text-4xl text-white">$62.50</div>
+        <div class="text-sm text-white/55 mt-2">per 4-hour session</div>
+      </div>
+      <div class="card p-6">
+        <div class="font-mono text-[11px] tracking-[.18em] text-deepseek-200 mb-3">// DEEPSEEK V4</div>
+        <div class="display text-4xl text-white">$0.02</div>
+        <div class="text-sm text-white/55 mt-2">per 4-hour session</div>
+      </div>
+      <div class="card p-6">
+        <div class="font-mono text-[11px] tracking-[.18em] text-amber-300 mb-3">// SAVINGS</div>
+        <div class="display text-4xl grad-amber">3000×</div>
+        <div class="text-sm text-white/55 mt-2">— or 99.97% less</div>
+      </div>
+    </div>
+
+    <p class="mt-8 text-sm text-white/45 font-mono max-w-xl mx-auto">
+      * Tính trên giả định 1.5M input + 300k output tokens/4h coding. Pricing tham khảo: Anthropic public pricing & DeepSeek API.
+    </p>
+  </div>
+</section>
+
+<!-- ============== CONNECTOR ============== -->
+<div class="connector"></div>
+
+<!-- ============== 03 · BENCHMARKS ============== -->
+<section id="benchmarks" class="px-6">
+  <div class="max-w-6xl mx-auto text-center">
+
+    <span class="badge"><span class="dot bg-emerald-400"></span> 03 · BENCHMARKS</span>
+
+    <h2 class="mt-8 display text-white text-5xl sm:text-7xl md:text-[88px]">
+      Does it actually <span class="grad-green">code</span>?
+    </h2>
+
+    <p class="mt-8 max-w-2xl mx-auto text-lg text-white/65 leading-relaxed">
+      Có — và trên hầu hết coding benchmark, <span class="text-deepseek-200 font-medium">V4 Pro</span>
+      ngang ngửa hoặc <span class="text-emerald-300 font-medium">vượt</span> Claude.
+    </p>
+
+    <div class="mt-14 card p-6 sm:p-10">
+      <!-- chart legend -->
+      <div class="flex flex-wrap items-center justify-center gap-6 mb-8 text-sm">
+        <div class="flex items-center gap-2"><span class="inline-block w-4 h-2.5 rounded-sm bg-deepseek"></span><span class="text-white/85">DeepSeek V4 Pro</span></div>
+        <div class="flex items-center gap-2"><span class="inline-block w-4 h-2.5 rounded-sm" style="background:#F2A07A"></span><span class="text-white/85">Claude Sonnet 4.6</span></div>
+        <div class="flex items-center gap-2"><span class="inline-block w-4 h-2.5 rounded-sm bg-claude"></span><span class="text-white/85">Claude Opus 4.7</span></div>
+      </div>
+      <div class="relative h-[420px]">
+        <canvas id="benchChart"></canvas>
+      </div>
+    </div>
+
+    <!-- caveat -->
+    <div class="mt-10 max-w-3xl mx-auto text-center">
+      <p class="text-base text-white/70 leading-relaxed">
+        <span class="text-white font-semibold">Caveat:</span> Claude vẫn thắng ở mặt
+        <span class="grad-claude font-semibold">polish</span> — long sessions, design taste, instruction nuance.
+      </p>
+      <p class="mt-3 text-base text-white/55 leading-relaxed">
+        DeepSeek thắng ở narrow code task. Claude thắng ở <span class="italic">judgement</span>.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ============== CONNECTOR ============== -->
+<div class="connector"></div>
+
+<!-- ============== 04 · DUAL TERMINAL ============== -->
+<section id="setup" class="px-6">
+  <div class="max-w-6xl mx-auto text-center">
+
+    <span class="badge"><span class="dot bg-amber-400"></span> 04 · DUAL TERMINAL</span>
+
+    <h2 class="mt-8 display text-white text-5xl sm:text-7xl md:text-[88px]">
+      Two terminals.<br/>
+      <span class="grad-amber">One workflow.</span>
+    </h2>
+
+    <p class="mt-8 max-w-2xl mx-auto text-lg text-white/65 leading-relaxed">
+      Một local proxy nhỏ cho phép anh chạy <span class="text-claude-200 font-medium">Claude thật</span>
+      và <span class="text-deepseek-200 font-medium">Claude Code dùng DeepSeek</span> song song —
+      cùng lúc, trên 2 terminal khác nhau.
+    </p>
+
+    <!-- placeholder image: dual terminal diagram -->
+    <div class="mt-14 ph aspect-[16/10] max-w-5xl mx-auto">
+      <span class="ph-tag">▮ IMAGE PLACEHOLDER #2 — hai-terminal-infographic.png</span>
+      <span class="ph-aspect">16 : 10</span>
+      <div class="ph-center">
+        <div class="icon-box"><i data-lucide="terminal" class="w-7 h-7 text-claude"></i></div>
+        <div class="font-serif italic text-2xl text-white/80 mb-2">HAI TERMINAL — Một workflow song song</div>
+        <div class="font-mono text-xs text-white/40 max-w-lg">
+          Infographic flat-vector visual thinking: Terminal 1 (cá voi = DeepSeek) ↔ PROXY :8082 ↔ Terminal 2 (mặt trời = Claude) ↔ 2 API backend
+        </div>
+      </div>
+    </div>
+
+    <!-- copy button for image #2 prompt -->
+    <div class="mt-6 flex justify-center">
+      <button onclick="copyText('p2', event)" class="cursor-pointer inline-flex items-center gap-2 text-[13px] text-white/75 hover:text-white border border-white/15 hover:border-white/30 px-4 py-2.5 rounded-full transition-colors">
+        <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+        Copy prompt — IMAGE #2
+      </button>
+      <p id="p2" class="sr-only" aria-hidden="true">Editorial infographic in Claude AI signature style, 16:10 aspect ratio. Warm cream background (#F0EEE6) with very subtle paper grain — modern matte cream like Claude AI's marketing pages, NOT parchment, NOT vintage, NOT aged texture. Hand-drawn but clean confident line illustrations with subtle color fills, like a polished architect's sketch with editorial warmth. Generous whitespace, intelligent friendly feel.
+
+ALL on-image text in VIETNAMESE WITH FULL DIACRITICS — only brand names (CLAUDE, DEEPSEEK, ANTHROPIC), technical terms (TERMINAL, PROXY, API), and inline code (claude, :8082, $) stay in English.
+
+TYPOGRAPHY: bold modern serif-sans hybrid for title in dark slate; neat sans-serif for body labels with handwritten warmth; monospace for technical keywords.
+
+TITLE at top, centered:
+"HAI TERMINAL — Một workflow song song"
+Subtitle below in lighter weight grey: "Một local proxy nhỏ chạy được cả Claude thật và Claude Code dùng DeepSeek".
+
+CENTER COMPOSITION (3 layers, top to bottom):
+
+LAYER 1 — Two terminal windows side by side, hand-drawn line art with subtle color fills:
+• LEFT: a hand-drawn macOS-style terminal window with traffic-light dots top-left, body cream-tinted, outline and accents in DeepSeek blue (#4D6BFE). Inside: a tiny minimal blue whale icon and the line "$ claude" with a blinking cursor in monospace. Below the window in bold: "TERMINAL 1". A curved hand-drawn arrow with annotation tag: "Chạy Claude Code dùng DeepSeek — rẻ, cày bulk".
+• RIGHT: same hand-drawn terminal style, outline and accents in Claude orange (#DA7756). Inside: an orange spiked-sun (Claude logo) and "$ claude" with blinking cursor. Below: "TERMINAL 2". A curved arrow with annotation tag: "Chạy Claude thật — review, polish, judgement".
+
+LAYER 2 — The PROXY in the middle:
+• Both terminals connect downward via thick hand-drawn rounded pipes (DeepSeek blue from the left, Claude orange from the right) with directional flow arrows.
+• Pipes converge into a central rectangular box, hand-drawn, slate-cream fill with soft shadow, labeled in bold monospace: "PROXY :8082" alongside a small server/router icon. Annotation tag: "Local proxy — convert API format Anthropic ↔ DeepSeek".
+
+LAYER 3 — Two API backends at the bottom:
+• Two pipes split down from PROXY into two backend boxes, hand-drawn:
+   – LEFT box "DEEPSEEK API" with small whale, DeepSeek blue accent. Caption below: "Backend rẻ · open-weight".
+   – RIGHT box "ANTHROPIC API" with orange sun icon, Claude orange accent. Caption below: "Backend chính chủ · cao cấp".
+
+DECORATIVE ELEMENTS (visual thinking):
+• Small floating Vietnamese annotation labels with curved hand-drawn connector lines:
+   – "Cùng lúc, không xung đột"
+   – "Đổi backend chỉ qua biến môi trường"
+   – "Workflow Claude Code giữ nguyên 100%"
+• A few tiny doodle icons tastefully placed: gear, lightning bolt, a dollar sign with a strikethrough.
+
+Visual style: hand-drawn editorial line illustration in Claude AI marketing aesthetic — confident strokes on warm cream paper, modern minimal feel, NOT parchment, NOT vintage, NOT photorealistic. Palette: cream background (#F0EEE6), dark slate text, Claude orange (#DA7756), DeepSeek blue (#4D6BFE), neutral grey ink for connectors, brass-gold for small accents. Warm, intelligent, considered.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============== CONNECTOR ============== -->
+<div class="connector"></div>
+
+<!-- ============== 05 · HOW IT WORKS ============== -->
+<section id="how" class="px-6">
+  <div class="max-w-6xl mx-auto text-center">
+
+    <span class="badge"><span class="dot bg-emerald-400"></span> 05 · HOW IT WORKS</span>
+
+    <h2 class="mt-8 display text-white text-5xl sm:text-7xl md:text-[88px]">
+      Bốn bước. <span class="grad-green">Hết.</span>
+    </h2>
+
+    <p class="mt-8 max-w-2xl mx-auto text-lg text-white/65 leading-relaxed">
+      Không cần đổi tool, không cần học lại workflow. Vẫn <span class="text-claude-200">Claude Code</span> thân quen —
+      chỉ thay base URL trỏ về proxy local.
+    </p>
+
+    <!-- 4 step cards -->
+    <div class="mt-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 text-left">
+
+      <div class="card card-hover p-7 relative">
+        <div class="step-num">01</div>
+        <div class="mt-3 text-white font-semibold text-lg">Cài proxy</div>
+        <p class="mt-2 text-sm text-white/60 leading-relaxed">Clone <span class="font-mono text-claude-200">free-claude-code</span> và chạy 1 lệnh duy nhất để dựng local proxy ở port 8082.</p>
+        <div class="mt-5 code p-3.5">
+          <span class="c-prompt">$</span> <span class="c-cmd">git clone</span> <span class="c-str">…/free-claude-code</span><br>
+          <span class="c-prompt">$</span> <span class="c-cmd">cd</span> free-claude-code<br>
+          <span class="c-prompt">$</span> <span class="c-cmd">bun</span> install
+        </div>
+      </div>
+
+      <div class="card card-hover p-7 relative">
+        <div class="step-num">02</div>
+        <div class="mt-3 text-white font-semibold text-lg">Set API key</div>
+        <p class="mt-2 text-sm text-white/60 leading-relaxed">Lấy DeepSeek API key, export vào env. Proxy sẽ tự convert sang Anthropic API format.</p>
+        <div class="mt-5 code p-3.5">
+          <span class="c-prompt">$</span> <span class="c-key">export</span> DEEPSEEK_API_KEY=<span class="c-str">"sk-…"</span><br>
+          <span class="c-prompt">$</span> <span class="c-cmd">bun</span> run start<br>
+          <span class="c-com"># proxy listening :8082</span>
+        </div>
+      </div>
+
+      <div class="card card-hover p-7 relative">
+        <div class="step-num">03</div>
+        <div class="mt-3 text-white font-semibold text-lg">Trỏ Claude Code</div>
+        <p class="mt-2 text-sm text-white/60 leading-relaxed">Mở terminal mới, set <span class="font-mono">ANTHROPIC_BASE_URL</span> trỏ về proxy rồi chạy Claude Code như bình thường.</p>
+        <div class="mt-5 code p-3.5">
+          <span class="c-prompt">$</span> <span class="c-key">export</span> ANTHROPIC_BASE_URL=<span class="c-str">"http://localhost:8082"</span><br>
+          <span class="c-prompt">$</span> <span class="c-cmd">claude</span>
+        </div>
+      </div>
+
+      <div class="card card-hover p-7 relative">
+        <div class="step-num">04</div>
+        <div class="mt-3 text-white font-semibold text-lg">Tiết kiệm 99%</div>
+        <p class="mt-2 text-sm text-white/60 leading-relaxed">Đó là tất cả. Workflow giữ nguyên, hoá đơn cuối tháng giảm từ <span class="text-white">$1,200</span> xuống <span class="grad-green font-semibold">~$1</span>.</p>
+        <div class="mt-5 code p-3.5">
+          <span class="c-com"># Claude Code đang chạy bằng DeepSeek V4</span><br>
+          <span class="c-prompt">›</span> refactor src/auth.ts to use jwt<br>
+          <span class="c-blue">⠋ Thinking…</span>
+        </div>
+      </div>
+
+    </div>
+
+    <p class="mt-10 text-sm text-white/45 font-mono">
+      Pro tip — mở 2 terminal: 1 chạy Claude thật cho task khó, 1 chạy DeepSeek cho task lượng lớn. Cùng anh hệ Claude Code.
+    </p>
+  </div>
+</section>
+
+<!-- ============== CONNECTOR ============== -->
+<div class="connector"></div>
+
+<!-- ============== 06 · WHEN TO USE WHICH ============== -->
+<section id="when" class="px-6">
+  <div class="max-w-6xl mx-auto text-center">
+
+    <span class="badge"><span class="dot bg-purple-400"></span> 06 · WHEN TO USE WHICH</span>
+
+    <h2 class="mt-8 display text-white text-5xl sm:text-7xl md:text-[88px]">
+      Không thay thế.<br/>
+      <span class="grad-purple">Bổ sung.</span>
+    </h2>
+
+    <p class="mt-8 max-w-2xl mx-auto text-lg text-white/65 leading-relaxed">
+      Đây không phải trận đấu DeepSeek <span class="font-mono">vs</span> Claude — mà là biết khi nào nên dùng cái nào để tối ưu cả chi phí lẫn chất lượng.
+    </p>
+
+    <div class="mt-16 grid grid-cols-1 md:grid-cols-2 gap-5 text-left">
+
+      <!-- DeepSeek column -->
+      <div class="card p-8">
+        <div class="flex items-center gap-3 mb-6">
+          <span class="w-10 h-10 rounded-xl bg-deepseek/15 border border-deepseek/40 flex items-center justify-center">
+            <i data-lucide="zap" class="w-5 h-5 text-deepseek-300"></i>
+          </span>
+          <div>
+            <div class="font-mono text-[11px] tracking-[.18em] text-deepseek-200">// USE DEEPSEEK FOR</div>
+            <div class="text-2xl font-semibold text-white">Bulk · Cheap · Fast</div>
+          </div>
+        </div>
+        <ul class="space-y-3.5">
+          <li class="flex gap-3"><span class="chip-good shrink-0 px-1.5 py-0.5 rounded-md text-[11px] font-mono mt-0.5">YES</span><span class="text-white/80 text-[15px]"><span class="font-medium text-white">Refactor hàng loạt</span> — đổi naming convention, thay API call cũ qua mới, cập nhật type signature.</span></li>
+          <li class="flex gap-3"><span class="chip-good shrink-0 px-1.5 py-0.5 rounded-md text-[11px] font-mono mt-0.5">YES</span><span class="text-white/80 text-[15px]"><span class="font-medium text-white">Scaffold project mới</span> — sinh boilerplate, route, schema, CRUD pattern.</span></li>
+          <li class="flex gap-3"><span class="chip-good shrink-0 px-1.5 py-0.5 rounded-md text-[11px] font-mono mt-0.5">YES</span><span class="text-white/80 text-[15px]"><span class="font-medium text-white">Narrow code task</span> — viết unit test, regex, SQL query, parse JSON.</span></li>
+          <li class="flex gap-3"><span class="chip-good shrink-0 px-1.5 py-0.5 rounded-md text-[11px] font-mono mt-0.5">YES</span><span class="text-white/80 text-[15px]"><span class="font-medium text-white">Throwaway script</span> — file thử nghiệm, prototyping, automation 1 lần.</span></li>
+        </ul>
+      </div>
+
+      <!-- Claude column -->
+      <div class="card p-8">
+        <div class="flex items-center gap-3 mb-6">
+          <span class="w-10 h-10 rounded-xl bg-claude/15 border border-claude/40 flex items-center justify-center">
+            <i data-lucide="sparkles" class="w-5 h-5 text-claude"></i>
+          </span>
+          <div>
+            <div class="font-mono text-[11px] tracking-[.18em] text-claude-200">// USE CLAUDE FOR</div>
+            <div class="text-2xl font-semibold text-white">Polish · Judgment · Long</div>
+          </div>
+        </div>
+        <ul class="space-y-3.5">
+          <li class="flex gap-3"><span class="chip-good shrink-0 px-1.5 py-0.5 rounded-md text-[11px] font-mono mt-0.5">YES</span><span class="text-white/80 text-[15px]"><span class="font-medium text-white">Architectural judgment</span> — chọn tech stack, design pattern, trade-off scaling.</span></li>
+          <li class="flex gap-3"><span class="chip-good shrink-0 px-1.5 py-0.5 rounded-md text-[11px] font-mono mt-0.5">YES</span><span class="text-white/80 text-[15px]"><span class="font-medium text-white">Long sessions</span> — debug đa file, context lớn, suy luận xuyên suốt hàng giờ.</span></li>
+          <li class="flex gap-3"><span class="chip-good shrink-0 px-1.5 py-0.5 rounded-md text-[11px] font-mono mt-0.5">YES</span><span class="text-white/80 text-[15px]"><span class="font-medium text-white">Design taste & UX</span> — UI polish, copywriting, brand voice, micro-interaction.</span></li>
+          <li class="flex gap-3"><span class="chip-good shrink-0 px-1.5 py-0.5 rounded-md text-[11px] font-mono mt-0.5">YES</span><span class="text-white/80 text-[15px]"><span class="font-medium text-white">Instruction nuance</span> — task có yêu cầu ngầm, ràng buộc tinh tế, an toàn cao.</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- combined verdict -->
+    <div class="mt-10 card p-7 max-w-3xl mx-auto text-center">
+      <div class="flex items-center justify-center gap-3 mb-3 text-white/85">
+        <i data-lucide="git-merge" class="w-5 h-5 text-amber-300"></i>
+        <span class="font-mono text-[11px] tracking-[.18em] text-amber-300">// THE COMBO</span>
+      </div>
+      <p class="text-lg text-white/80 leading-relaxed">
+        Mở <span class="text-deepseek-200 font-medium">2 terminal song song</span>: dùng DeepSeek để cày 90% công việc, dùng Claude để
+        <span class="grad-claude font-semibold">review · polish · quyết định</span> — chi phí giảm <span class="grad-amber font-semibold">~99%</span> mà chất lượng vẫn ở mức Claude.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ============== CONNECTOR ============== -->
+<div class="connector"></div>
+
+<!-- ============== 07 · GET STARTED ============== -->
+<section id="start" class="px-6 pb-24">
+  <div class="max-w-5xl mx-auto">
+
+    <div class="text-center">
+      <span class="badge"><span class="dot bg-claude"></span> 07 · GET STARTED</span>
+      <h2 class="mt-8 display text-white text-5xl sm:text-7xl md:text-[80px]">
+        Bắt đầu trong<br/>
+        <span class="grad-claude">2 phút.</span>
+      </h2>
+      <p class="mt-8 max-w-2xl mx-auto text-lg text-white/65 leading-relaxed">
+        Open source, MIT license. Copy 4 dòng dưới, dán vào terminal, xong.
+      </p>
+    </div>
+
+    <!-- big code block -->
+    <div class="mt-12 card p-2">
+      <div class="flex items-center gap-2 px-4 py-3 border-b border-white/10">
+        <span class="w-3 h-3 rounded-full bg-red-400/80"></span>
+        <span class="w-3 h-3 rounded-full bg-amber-400/80"></span>
+        <span class="w-3 h-3 rounded-full bg-emerald-400/80"></span>
+        <span class="ml-3 font-mono text-[12px] text-white/45">~/projects/free-claude-code · zsh</span>
+        <button onclick="copyText('cmd')" class="cursor-pointer ml-auto inline-flex items-center gap-1.5 text-[11px] text-white/60 hover:text-white border border-white/15 hover:border-white/30 px-2.5 py-1 rounded-full transition-colors">
+          <i data-lucide="copy" class="w-3 h-3"></i> Copy all
+        </button>
+      </div>
+      <pre id="cmd" class="code rounded-none border-0 p-6 text-[14px] leading-[1.9] whitespace-pre overflow-x-auto"><span class="c-com"># 1. Clone free-claude-code proxy</span>
+<span class="c-prompt">$</span> <span class="c-cmd">git clone</span> https://github.com/your-org/free-claude-code
+<span class="c-prompt">$</span> <span class="c-cmd">cd</span> free-claude-code &amp;&amp; <span class="c-cmd">bun</span> install
+
+<span class="c-com"># 2. Set DeepSeek API key & start proxy</span>
+<span class="c-prompt">$</span> <span class="c-key">export</span> DEEPSEEK_API_KEY=<span class="c-str">"sk-xxxx"</span>
+<span class="c-prompt">$</span> <span class="c-cmd">bun</span> run start            <span class="c-com"># listening on :8082</span>
+
+<span class="c-com"># 3. New terminal — point Claude Code at the proxy</span>
+<span class="c-prompt">$</span> <span class="c-key">export</span> ANTHROPIC_BASE_URL=<span class="c-str">"http://localhost:8082"</span>
+<span class="c-prompt">$</span> <span class="c-cmd">claude</span>                   <span class="c-com"># normal Claude Code, now backed by DeepSeek V4</span></pre>
+    </div>
+
+    <!-- CTA -->
+    <div class="mt-10 grid grid-cols-1 md:grid-cols-3 gap-4">
+      <a target="_blank" rel="noopener" href="https://github.com/" class="card card-hover p-6 cursor-pointer flex items-center justify-between">
+        <div>
+          <div class="font-mono text-[11px] tracking-[.18em] text-white/45 mb-1">// REPO</div>
+          <div class="text-white font-semibold">free-claude-code</div>
+          <div class="text-sm text-white/50">16.5k★ · MIT · TypeScript</div>
+        </div>
+        <i data-lucide="github" class="w-6 h-6 text-white/70"></i>
+      </a>
+      <a href="https://docs.anthropic.com/en/docs/claude-code" target="_blank" rel="noopener" class="card card-hover p-6 cursor-pointer flex items-center justify-between">
+        <div>
+          <div class="font-mono text-[11px] tracking-[.18em] text-claude-200 mb-1">// CLAUDE CODE</div>
+          <div class="text-white font-semibold">Docs chính chủ</div>
+          <div class="text-sm text-white/50">Anthropic CLI guide</div>
+        </div>
+        <i data-lucide="book-open" class="w-6 h-6 text-claude"></i>
+      </a>
+      <a href="https://api-docs.deepseek.com/" target="_blank" rel="noopener" class="card card-hover p-6 cursor-pointer flex items-center justify-between">
+        <div>
+          <div class="font-mono text-[11px] tracking-[.18em] text-deepseek-200 mb-1">// DEEPSEEK API</div>
+          <div class="text-white font-semibold">Lấy API key</div>
+          <div class="text-sm text-white/50">deepseek.com/api</div>
+        </div>
+        <i data-lucide="key" class="w-6 h-6 text-deepseek-300"></i>
+      </a>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ============== FOOTER ============== -->
+<footer class="border-t border-white/8 py-10 px-6 relative z-10">
+  <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-white/45">
+    <div class="flex items-center gap-2">
+      <span class="w-5 h-5 rounded-md bg-claude/20 border border-claude/40 flex items-center justify-center">
+        <span class="w-1.5 h-1.5 rounded-full bg-claude"></span>
+      </span>
+      <span class="font-mono text-[12px] tracking-wide">DEEPSEEK × CLAUDE CODE — knowledge by Hoàng</span>
+    </div>
+    <div class="font-mono text-[12px] flex items-center gap-4">
+      <span>v1.0 · 2026</span>
+      <a href="#hero" class="hover:text-white inline-flex items-center gap-1.5"><i data-lucide="arrow-up" class="w-3.5 h-3.5"></i> Về đầu trang</a>
+    </div>
+  </div>
+</footer>
+
+<!-- ============== SCRIPTS ============== -->
+<script>
+  // Lucide icons
+  if (window.lucide) lucide.createIcons();
+
+  // Copy helper
+  function copyText(id, ev){
+    const el = document.getElementById(id);
+    if (!el) return;
+    const text = (el.textContent || '').trim();
+    navigator.clipboard.writeText(text).then(()=>{
+      const btn = (ev && ev.currentTarget) || (window.event && window.event.currentTarget);
+      if (!btn) return;
+      const old = btn.innerHTML;
+      btn.innerHTML = '<i data-lucide="check" class="w-3.5 h-3.5"></i> Đã copy';
+      lucide.createIcons();
+      setTimeout(()=>{ btn.innerHTML = old; lucide.createIcons(); }, 1400);
+    });
+  }
+
+  // Benchmark chart
+  (function(){
+    const ctx = document.getElementById('benchChart');
+    if (!ctx) return;
+    const ds = '#4D6BFE';
+    const sonnet = '#F2A07A';
+    const opus = '#DA7756';
+
+    const data = {
+      labels: ['SWE-bench Verified', 'LiveCodeBench', 'TerminalBench 2.0', 'MCP Atlas (tool use)'],
+      datasets: [
+        { label: 'DeepSeek V4 Pro',  data: [80, 92, 68, 73], backgroundColor: ds,     borderRadius: 6, barThickness: 28 },
+        { label: 'Claude Sonnet 4.6', data: [78,  0, 0, 60], backgroundColor: sonnet, borderRadius: 6, barThickness: 28 },
+        { label: 'Claude Opus 4.7',   data: [82,  0, 59, 79], backgroundColor: opus,  borderRadius: 6, barThickness: 28 },
+      ]
+    };
+
+    new Chart(ctx, {
+      type: 'bar',
+      data,
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        animation: { duration: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 800 },
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            backgroundColor: 'rgba(7,7,10,0.95)',
+            borderColor: 'rgba(255,255,255,0.12)', borderWidth: 1,
+            titleFont: { family: 'Inter', weight: '600' },
+            bodyFont:  { family: 'JetBrains Mono', size: 12 },
+            padding: 12, displayColors: true, boxWidth: 8, boxHeight: 8, boxPadding: 4,
+            callbacks: { label: (c) => ` ${c.dataset.label}: ${c.parsed.y}%` }
+          }
+        },
+        scales: {
+          x: {
+            grid: { color: 'rgba(255,255,255,0.04)', drawBorder: false },
+            ticks: { color: 'rgba(255,255,255,0.7)', font: { family: 'JetBrains Mono', size: 12 } }
+          },
+          y: {
+            beginAtZero: true, max: 100,
+            grid: { color: 'rgba(255,255,255,0.06)', drawBorder: false },
+            ticks: {
+              color: 'rgba(255,255,255,0.45)',
+              font: { family: 'JetBrains Mono', size: 11 },
+              callback: (v) => v + '%'
+            }
+          }
+        }
+      }
+    });
+  })();
+</script>
+</body>
+</html>

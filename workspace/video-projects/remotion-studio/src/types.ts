@@ -196,3 +196,133 @@ export type ProgressiveReductionProps = {
   bgMusic?: string;
   durationSeconds: number;
 };
+
+export type IconOverlay = {
+  iconPath: string;
+  startSec: number;
+  endSec: number;
+  label?: string;
+  labelColor?: string;
+  bgColor?: string;
+  position?: "top" | "top-right" | "top-left";
+  size?: number;
+};
+
+export type NewsScene =
+  | {
+      type: "hero";
+      startSec: number;
+      durationSec: number;
+      headline: string;
+      subheadline?: string;
+      dateChip?: string;
+      logo?: "vercel" | "nextjs" | "google";
+      emphasisWord?: string;
+    }
+  | {
+      type: "stat";
+      startSec: number;
+      durationSec: number;
+      value: string;
+      label: string;
+      subLabel?: string;
+      color?: "red" | "yellow" | "cyan" | "green";
+    }
+  | {
+      type: "question";
+      startSec: number;
+      durationSec: number;
+      question: string;
+      kicker?: string;
+    }
+  | {
+      type: "attackChain";
+      startSec: number;
+      durationSec: number;
+      title: string;
+      nodes: Array<{
+        label: string;
+        sub?: string;
+        icon: "hacker" | "context" | "oauth" | "google" | "vercel" | "shield";
+        highlight?: boolean;
+      }>;
+    }
+  | {
+      type: "leakList";
+      startSec: number;
+      durationSec: number;
+      title: string;
+      subtitle?: string;
+      items: string[];
+    }
+  | {
+      type: "quote";
+      startSec: number;
+      durationSec: number;
+      text: string;
+      author: string;
+      role?: string;
+      accent?: "red" | "cyan" | "yellow";
+    }
+  | {
+      type: "marketListing";
+      startSec: number;
+      durationSec: number;
+      source: string;
+      actor: string;
+      price: string;
+      disclaimer?: string;
+    }
+  | {
+      type: "steps";
+      startSec: number;
+      durationSec: number;
+      title: string;
+      steps: Array<{ label: string; detail?: string }>;
+    }
+  | {
+      type: "cta";
+      startSec: number;
+      durationSec: number;
+      prompt: string;
+      brand: string;
+      tagline: string;
+    };
+
+export type NewsCaptionWord = { word: string; start: number; end: number };
+
+export type NewsCaption = {
+  text: string;
+  startSec: number;
+  endSec: number;
+  words?: NewsCaptionWord[];
+  highlights?: string[];
+};
+
+export type NewsShareProps = {
+  audioPath: string;
+  durationSeconds: number;
+  breakingLabel?: string;
+  dateLabel?: string;
+  brandName?: string;
+  brandTagline?: string;
+  tickerItems: string[];
+  scenes: NewsScene[];
+  captions: NewsCaption[];
+  bgMusicPath?: string;
+  bgMusicVolume?: number;
+};
+
+export type TikTokCreatorProps = {
+  videoPath: string;
+  videoStartSec?: number;
+  durationSeconds: number;
+  captions: CaptionSegment[];
+  iconOverlays?: IconOverlay[];
+  soundEffects?: SoundEffect[];
+  backgroundMusic?: BackgroundMusicTrack[];
+  hookBoostSec?: number;
+  showProgressBar?: boolean;
+  footerText?: string;
+  volume?: number;
+};

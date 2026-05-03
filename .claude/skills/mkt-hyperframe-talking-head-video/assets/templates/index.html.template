@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <title>3 Bài Học từ Alphabet — Hoàng AI</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500&display=swap"
+    rel="stylesheet"
+  />
+  <style>
+    :root {
+      --brand-bg: #faf9f5;
+      --brand-surface: #e8e6dc;
+      --brand-border: #d6d3c7;
+      --brand-ink: #141413;
+      --brand-ink-mute: #b0aea5;
+      --brand-accent: #d97757;
+      --brand-accent-2: #6a9bcc;
+      --brand-accent-3: #788c5d;
+      --brand-bg-dark: #141413;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: var(--brand-ink);
+      font-family: 'Be Vietnam Pro', 'Inter', Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    [data-composition-id="root"] {
+      position: relative;
+      width: 1080px;
+      height: 1920px;
+      overflow: hidden;
+      background: #000;
+    }
+
+    /* ===== SOURCE VIDEO ===== */
+    #v-source {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      z-index: 1;
+      transform-origin: center 38%;
+      will-change: transform;
+    }
+
+    /* Subtle vignette helper */
+    .vignette {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 2;
+      background: linear-gradient(
+        180deg,
+        rgba(20, 20, 19, 0.35) 0%,
+        rgba(20, 20, 19, 0) 22%,
+        rgba(20, 20, 19, 0) 60%,
+        rgba(20, 20, 19, 0.55) 100%
+      );
+    }
+
+    /* ===== HEADER PILL (top, always-on) ===== */
+    .header-pill {
+      position: absolute;
+      top: 64px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 30;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 16px 30px;
+      background: rgba(20, 20, 19, 0.78);
+      border: 1.5px solid rgba(250, 249, 245, 0.18);
+      border-radius: 999px;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+    .header-pill .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--brand-accent);
+      box-shadow: 0 0 0 4px rgba(217, 119, 87, 0.18);
+    }
+    .header-pill .label {
+      font-family: 'Be Vietnam Pro', 'Inter', sans-serif;
+      font-weight: 600;
+      font-size: 30px;
+      letter-spacing: 0.04em;
+      color: var(--brand-bg);
+      text-transform: uppercase;
+    }
+    .header-pill .label .accent { color: var(--brand-accent); }
+
+    /* ===== HOOK OVERLAY (0-4s, NOT full-screen, face vẫn hiện) ===== */
+    .hook-overlay {
+      position: absolute;
+      top: 170px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 28;
+      width: 880px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 32px 40px 30px;
+      background: rgba(250, 249, 245, 0.96);
+      border-radius: 26px;
+      box-shadow: 0 18px 50px rgba(20, 20, 19, 0.42);
+      text-align: left;
+      box-sizing: border-box;
+    }
+    .hook-overlay .fs-eyebrow {
+      font-family: 'Be Vietnam Pro', 'Inter', sans-serif;
+      font-weight: 600;
+      font-size: 24px;
+      letter-spacing: 0.18em;
+      color: var(--brand-accent);
+      text-transform: uppercase;
+      margin-bottom: 2px;
+    }
+    .hook-overlay .fs-title {
+      font-family: 'Be Vietnam Pro', 'Inter', sans-serif;
+      font-weight: 800;
+      font-size: 78px;
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      color: var(--brand-ink);
+      margin: 0;
+    }
+    .hook-overlay .fs-title .accent { color: var(--brand-accent); }
+    .hook-overlay .fs-rule {
+      width: 80px;
+      height: 4px;
+      background: var(--brand-accent);
+      border-radius: 999px;
+      margin-top: 6px;
+    }
+    .hook-overlay .fs-sub {
+      font-family: 'Be Vietnam Pro', 'Inter', sans-serif;
+      font-weight: 500;
+      font-style: italic;
+      font-size: 26px;
+      line-height: 1.35;
+      color: var(--brand-ink);
+      opacity: 0.78;
+      margin-top: 4px;
+    }
+
+    /* ===== SUB-COMPOSITION MOUNT WRAPPERS ===== */
+    .broll-mount {
+      position: absolute;
+      inset: 0;
+      z-index: 32;
+    }
+    .recap-mount {
+      position: absolute;
+      inset: 0;
+      z-index: 24;
+    }
+    .captions-mount {
+      position: absolute;
+      inset: 0;
+      z-index: 35;
+      pointer-events: none;
+    }
+
+    /* ===== FOOTER WORDMARK (bottom-center, always-on) ===== */
+    .brand-mark {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: 70px;
+      z-index: 45;
+      font-family: 'Be Vietnam Pro', 'Inter', sans-serif;
+      font-weight: 600;
+      font-size: 30px;
+      letter-spacing: 0.04em;
+      color: var(--brand-bg);
+      opacity: 0.92;
+      padding: 10px 22px;
+      background: rgba(20, 20, 19, 0.55);
+      border-radius: 999px;
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+    }
+    .brand-mark .at { color: var(--brand-accent); margin-right: 2px; }
+  </style>
+</head>
+<body>
+  <div data-composition-id="root" data-start="0" data-width="1080" data-height="1920">
+    <!-- ============ BACKGROUND VIDEO + AUDIO ============ -->
+    <video
+      id="v-source"
+      data-start="0"
+      data-duration="106.94"
+      data-track-index="0"
+      src="source.mp4"
+      muted
+      playsinline
+    ></video>
+
+    <audio
+      id="a-source"
+      data-start="0"
+      data-duration="106.94"
+      data-track-index="1"
+      data-volume="1"
+      src="source.mp4"
+    ></audio>
+
+    <!-- ============ SOUND EFFECTS (6 SFX, spaced ≥1.5s) ============ -->
+    <audio id="sfx-hook" data-start="0"     data-duration="0.6" data-track-index="20" data-volume="0.32" src="sfx/camera-flash.mp3"></audio>
+    <audio id="sfx-l1"   data-start="9.35"  data-duration="0.4" data-track-index="21" data-volume="0.30" src="sfx/búng tay.mp3"></audio>
+    <audio id="sfx-l2"   data-start="34.45" data-duration="1.1" data-track-index="22" data-volume="0.22" src="sfx/Whoosh sound effect (1).mp3"></audio>
+    <audio id="sfx-l3"   data-start="61.45" data-duration="0.5" data-track-index="23" data-volume="0.28" src="sfx/Laser.mp3"></audio>
+    <audio id="sfx-recap" data-start="84.85" data-duration="1.0" data-track-index="24" data-volume="0.20" src="sfx/ting.mp3"></audio>
+    <audio id="sfx-cta"  data-start="99.0"  data-duration="1.0" data-track-index="25" data-volume="0.28" src="sfx/Discord Notification - Sound Effect.mp3"></audio>
+
+    <!-- Vignette helper (decorative) -->
+    <div class="vignette"></div>
+
+    <!-- ============ ALWAYS-ON UI (header pill + footer) ============ -->
+    <div
+      id="brand-mark"
+      class="clip brand-mark"
+      data-start="0"
+      data-duration="106.94"
+      data-track-index="2"
+    >
+      <span class="at">@</span>tranvanhoang.com
+    </div>
+
+    <div
+      id="header-pill"
+      class="clip header-pill"
+      data-start="0"
+      data-duration="106.94"
+      data-track-index="3"
+    >
+      <div class="dot"></div>
+      <div class="label"><span class="accent">3</span> Bài học · Alphabet</div>
+    </div>
+
+    <!-- ============ HOOK OVERLAY (0 → 4s, inline — face vẫn hiện) ============ -->
+    <div
+      id="fs-hook"
+      class="clip hook-overlay"
+      data-start="0"
+      data-duration="4.0"
+      data-track-index="4"
+    >
+      <div class="fs-eyebrow">Cách Alphabet build sản phẩm</div>
+      <h1 class="fs-title"><span class="accent">3 bài học</span> mình học được</h1>
+      <div class="fs-rule"></div>
+      <div class="fs-sub">Áp dụng cho One Person Business</div>
+    </div>
+
+    <!-- ============ SUB-COMPOSITION MOUNTS (b-roll toàn cảnh + recap) ============ -->
+    <!-- Lesson 1 — dark, zoom-IN punch (9.4 → 13.0s) -->
+    <div
+      id="mount-fs-lesson-1"
+      class="clip broll-mount"
+      data-composition-id="fs-lesson-1"
+      data-composition-src="compositions/fs-lesson-1.html"
+      data-start="9.4"
+      data-duration="3.6"
+      data-width="1080"
+      data-height="1920"
+      data-track-index="5"
+    ></div>
+
+    <!-- Lesson 2 — cream, zoom-OUT punch (34.5 → 38.0s) -->
+    <div
+      id="mount-fs-lesson-2"
+      class="clip broll-mount"
+      data-composition-id="fs-lesson-2"
+      data-composition-src="compositions/fs-lesson-2.html"
+      data-start="34.5"
+      data-duration="3.5"
+      data-width="1080"
+      data-height="1920"
+      data-track-index="6"
+    ></div>
+
+    <!-- Lesson 3 — dark, strongest punch (61.5 → 65.5s) -->
+    <div
+      id="mount-fs-lesson-3"
+      class="clip broll-mount"
+      data-composition-id="fs-lesson-3"
+      data-composition-src="compositions/fs-lesson-3.html"
+      data-start="61.5"
+      data-duration="4.0"
+      data-width="1080"
+      data-height="1920"
+      data-track-index="7"
+    ></div>
+
+    <!-- Recap overlay card (84.9 → 99.0s) -->
+    <div
+      id="mount-recap-card"
+      class="clip recap-mount"
+      data-composition-id="recap-card"
+      data-composition-src="compositions/recap-card.html"
+      data-start="84.9"
+      data-duration="14.1"
+      data-width="1080"
+      data-height="1920"
+      data-track-index="8"
+    ></div>
+
+    <!-- CTA finale b-roll (99 → 106.94s) -->
+    <div
+      id="mount-fs-cta"
+      class="clip broll-mount"
+      data-composition-id="fs-cta"
+      data-composition-src="compositions/fs-cta.html"
+      data-start="99.0"
+      data-duration="7.94"
+      data-width="1080"
+      data-height="1920"
+      data-track-index="9"
+    ></div>
+
+    <!-- ============ CAPTIONS (sub-composition) ============ -->
+    <div
+      id="mount-captions"
+      class="clip captions-mount"
+      data-composition-id="captions"
+      data-composition-src="compositions/captions.html"
+      data-start="0"
+      data-duration="106.94"
+      data-width="1080"
+      data-height="1920"
+      data-track-index="10"
+    ></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script>
+      window.__timelines = window.__timelines || {};
+
+      // ================== ROOT TIMELINE ==================
+      // Root only handles: header pill, brand mark, hook overlay, source video zoom.
+      // Sub-compositions (captions, lessons 1/2/3, recap, CTA) auto-nest their own timelines.
+      const tl = gsap.timeline({ paused: true });
+
+      // -------- Header pill (always-on) entrance + dot pulse --------
+      tl.from("#header-pill", {
+        y: -40, opacity: 0, duration: 0.6, ease: "power3.out",
+      }, 0.15);
+      const dotCycle = 1.6;
+      const dotRepeats = Math.ceil(106.94 / dotCycle) - 1;
+      tl.to("#header-pill .dot", {
+        scale: 1.18, duration: dotCycle / 2, ease: "sine.inOut",
+        yoyo: true, repeat: dotRepeats,
+      }, 1.0);
+
+      // -------- Brand watermark fade in --------
+      tl.from("#brand-mark", {
+        opacity: 0, duration: 0.7, ease: "power2.out",
+      }, 0.6);
+
+      // -------- HOOK OVERLAY (0 → 4.0s) — entrance + soft fade-out --------
+      tl.from("#fs-hook", {
+        scale: 0.94, opacity: 0, duration: 0.45, ease: "back.out(1.5)",
+      }, 0);
+      tl.from("#fs-hook .fs-eyebrow", {
+        y: -16, opacity: 0, duration: 0.45, ease: "power3.out",
+      }, 0.15);
+      tl.from("#fs-hook .fs-title", {
+        y: 30, opacity: 0, duration: 0.6, ease: "back.out(1.4)",
+      }, 0.3);
+      tl.from("#fs-hook .fs-rule", {
+        scaleX: 0, transformOrigin: "left center", duration: 0.45, ease: "expo.out",
+      }, 0.7);
+      tl.from("#fs-hook .fs-sub", {
+        y: 18, opacity: 0, duration: 0.5, ease: "power2.out",
+      }, 0.85);
+      tl.to("#fs-hook", {
+        opacity: 0, y: -16, duration: 0.45, ease: "power2.in",
+      }, 3.55);
+      // Hard kill (opacity 0 deterministic — framework manages visibility on clip elements)
+      tl.set("#fs-hook", { opacity: 0 }, 4.0);
+
+      // -------- SOURCE VIDEO ZOOM PULSES --------
+      // Punch zoom moments — sync với SFX, face vẫn hiện cả 3s đầu.
+      // Pattern từ heygen-short-video sound-design + zoomPulses references.
+      const SOURCE_PUNCHES = [
+        { t: 0.0,  scale: 1.10, dur: 0.6  }, // entry punch — sync camera flash
+        { t: 13.0, scale: 1.10, dur: 0.55 }, // sau lesson 1 b-roll
+        { t: 38.0, scale: 1.10, dur: 0.55 }, // sau lesson 2 b-roll
+        { t: 65.5, scale: 1.12, dur: 0.6  }, // sau lesson 3 b-roll — punch mạnh nhất
+      ];
+      SOURCE_PUNCHES.forEach((p) => {
+        tl.fromTo("#v-source",
+          { scale: p.scale },
+          { scale: 1.0, duration: p.dur, ease: "power3.out" },
+          p.t
+        );
+      });
+
+      // Subtle ambient ken-burns drift during long talking sections (cinematic feel)
+      const AMBIENT_DRIFTS = [
+        { start: 0.7,   end: 9.4,  from: 1.0, to: 1.03 }, // intro
+        { start: 13.6,  end: 34.5, from: 1.0, to: 1.04 }, // lesson 1 explanation
+        { start: 38.6,  end: 61.5, from: 1.0, to: 1.04 }, // lesson 2 explanation
+        { start: 66.1,  end: 84.9, from: 1.0, to: 1.05 }, // lesson 3 explanation
+      ];
+      AMBIENT_DRIFTS.forEach((d) => {
+        tl.fromTo("#v-source",
+          { scale: d.from },
+          { scale: d.to, duration: d.end - d.start, ease: "sine.inOut" },
+          d.start
+        );
+      });
+
+      window.__timelines["root"] = tl;
+    </script>
+  </div>
+</body>
+</html>

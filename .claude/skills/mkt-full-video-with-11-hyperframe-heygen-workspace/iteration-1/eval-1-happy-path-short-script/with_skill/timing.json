@@ -1,0 +1,11 @@
+{
+  "total_tokens": 128172,
+  "duration_ms": 316072,
+  "total_duration_seconds": 316.1,
+  "status": "partial-phase2-blocked",
+  "phases_completed": ["phase-0-setup", "phase-1-elevenlabs"],
+  "phases_blocked": ["phase-2-heygen", "phase-3-hyperframes"],
+  "block_reason": "HeyGen MCP token expired — needs re-authentication",
+  "credits_burned": "~$0.005 ElevenLabs (232 chars)",
+  "skill_behavior": "correct — stopped on MCP failure, did NOT fallback to REST"
+}

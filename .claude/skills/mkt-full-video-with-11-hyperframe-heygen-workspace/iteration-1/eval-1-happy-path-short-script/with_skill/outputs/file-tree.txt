@@ -1,0 +1,2 @@
+script.txt 294
+voiceover.mp3 210695

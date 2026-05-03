@@ -1,0 +1,261 @@
+<template id="fs-lesson-3-template">
+  <div data-composition-id="fs-lesson-3" data-start="0" data-width="1080" data-height="1920">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      [data-composition-id="fs-lesson-3"] {
+        width: 100%;
+        height: 100%;
+        background: #141413;
+        color: #faf9f5;
+        position: relative;
+        overflow: hidden;
+        font-family: 'Be Vietnam Pro', 'Inter', Arial, sans-serif;
+      }
+      /* Radial light sweep behind everything */
+      [data-composition-id="fs-lesson-3"] .light-sweep {
+        position: absolute;
+        top: 50%; left: 50%;
+        width: 1400px; height: 1400px;
+        margin: -700px 0 0 -700px;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(217, 119, 87, 0.28) 0%, rgba(217, 119, 87, 0) 55%);
+        z-index: 0;
+        pointer-events: none;
+        transform-origin: center;
+      }
+      /* Diagonal rays from center (8 rays) */
+      [data-composition-id="fs-lesson-3"] .ray {
+        position: absolute;
+        top: 50%; left: 50%;
+        width: 4px;
+        height: 800px;
+        background: linear-gradient(180deg, rgba(217, 119, 87, 0.4) 0%, rgba(217, 119, 87, 0) 80%);
+        transform-origin: top center;
+        z-index: 0;
+        pointer-events: none;
+        opacity: 0;
+      }
+      /* "PLOT TWIST" badge */
+      [data-composition-id="fs-lesson-3"] .badge {
+        position: absolute;
+        top: 100px; left: 50%;
+        transform: translateX(-50%);
+        padding: 12px 28px;
+        background: #d97757;
+        color: #141413;
+        border-radius: 999px;
+        font-weight: 700;
+        font-size: 26px;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        z-index: 6;
+      }
+
+      [data-composition-id="fs-lesson-3"] .scene-content {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        padding: 240px 80px 380px;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        z-index: 2;
+      }
+      [data-composition-id="fs-lesson-3"] .fs-eyebrow {
+        font-weight: 600;
+        font-size: 32px;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        color: #d97757;
+        margin-bottom: 18px;
+      }
+      [data-composition-id="fs-lesson-3"] .fs-num {
+        font-weight: 800;
+        font-size: 240px;
+        line-height: 0.86;
+        letter-spacing: -0.05em;
+        font-variant-numeric: tabular-nums;
+        margin-bottom: 12px;
+        color: #d97757;
+      }
+      [data-composition-id="fs-lesson-3"] .fs-title {
+        font-weight: 800;
+        font-size: 130px;
+        line-height: 1.1;
+        letter-spacing: -0.02em;
+        margin: 0 0 24px;
+      }
+      [data-composition-id="fs-lesson-3"] .fs-title .word {
+        display: inline-block;
+        will-change: transform, opacity;
+      }
+      [data-composition-id="fs-lesson-3"] .fs-title .accent-wrap {
+        display: inline-block;
+        position: relative;
+      }
+      /* Scribble underline SVG under "xin phép" */
+      [data-composition-id="fs-lesson-3"] .scribble {
+        position: absolute;
+        left: -8px; right: -8px;
+        bottom: -14px;
+        height: 22px;
+        z-index: -1;
+        pointer-events: none;
+      }
+      [data-composition-id="fs-lesson-3"] .scribble path {
+        fill: none;
+        stroke: #d97757;
+        stroke-width: 8;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+      [data-composition-id="fs-lesson-3"] .fs-title .accent { color: #d97757; }
+      [data-composition-id="fs-lesson-3"] .fs-sub {
+        font-style: italic;
+        font-weight: 500;
+        font-size: 38px;
+        line-height: 1.35;
+        max-width: 800px;
+        opacity: 0.74;
+        margin-top: 6px;
+      }
+    </style>
+
+    <div class="light-sweep"></div>
+    <!-- 8 rays around -->
+    <div class="ray" style="transform: translate(-50%, -50%) rotate(0deg);"></div>
+    <div class="ray" style="transform: translate(-50%, -50%) rotate(45deg);"></div>
+    <div class="ray" style="transform: translate(-50%, -50%) rotate(90deg);"></div>
+    <div class="ray" style="transform: translate(-50%, -50%) rotate(135deg);"></div>
+    <div class="ray" style="transform: translate(-50%, -50%) rotate(180deg);"></div>
+    <div class="ray" style="transform: translate(-50%, -50%) rotate(225deg);"></div>
+    <div class="ray" style="transform: translate(-50%, -50%) rotate(270deg);"></div>
+    <div class="ray" style="transform: translate(-50%, -50%) rotate(315deg);"></div>
+
+    <div class="badge">★ Bài học vàng</div>
+
+    <div class="scene-content">
+      <div class="fs-eyebrow">Bài học #3</div>
+      <div class="fs-num">03</div>
+      <div class="fs-title">
+        <span class="word">Không</span>
+        <span class="word">đợi</span><br />
+        <span class="word accent-wrap">
+          <span class="accent">xin phép</span>
+          <svg class="scribble" viewBox="0 0 600 22" preserveAspectRatio="none">
+            <path d="M 8 14 Q 80 4, 160 14 T 320 14 T 480 14 T 592 12" />
+          </svg>
+        </span>
+        <span class="word">ai</span>
+        <span class="word">cả</span>
+      </div>
+      <div class="fs-sub">Tự đề xuất, tự ship — bỏ rào cản trong đầu</div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+      const ROOT = '[data-composition-id="fs-lesson-3"]';
+
+      // Punch-zoom IN entrance (strongest of 3)
+      tl.from(ROOT + ' .scene-content', {
+        scale: 1.15, opacity: 0, duration: 0.45, ease: "back.out(1.7)",
+      }, 0);
+
+      // Light sweep + slow rotate
+      tl.from(ROOT + ' .light-sweep', {
+        opacity: 0, scale: 0.5, duration: 0.9, ease: "power2.out",
+      }, 0);
+      tl.to(ROOT + ' .light-sweep', {
+        rotation: 60,
+        duration: 4.0,
+        ease: "sine.inOut",
+      }, 0);
+
+      // Rays burst out
+      tl.fromTo(ROOT + ' .ray',
+        { opacity: 0, scaleY: 0, transformOrigin: "top center" },
+        { opacity: 0.9, scaleY: 1, duration: 0.65, ease: "power3.out", stagger: 0.04 },
+        0.1
+      );
+      // Rays fade
+      tl.to(ROOT + ' .ray', {
+        opacity: 0.15, duration: 0.7, ease: "power2.in",
+      }, 1.2);
+
+      // Badge slam in from above
+      tl.from(ROOT + ' .badge', {
+        y: -80, opacity: 0, scale: 1.4, duration: 0.5, ease: "back.out(1.8)",
+      }, 0.15);
+
+      // Eyebrow + NUM
+      tl.from(ROOT + ' .fs-eyebrow', {
+        y: -22, opacity: 0, duration: 0.45, ease: "power3.out",
+      }, 0.3);
+      tl.from(ROOT + ' .fs-num', {
+        scale: 0.5, opacity: 0, rotation: -8, duration: 0.65, ease: "back.out(1.6)",
+      }, 0.4);
+
+      // Title — slam each word with stagger (excluding scribble svg)
+      tl.from(ROOT + ' .fs-title .word', {
+        y: -50, opacity: 0, scale: 1.6,
+        duration: 0.5, ease: "back.out(1.8)",
+        stagger: 0.07,
+      }, 0.6);
+
+      // Scribble underline draws in (path pseudo-animate via stroke-dasharray)
+      tl.fromTo(ROOT + ' .scribble path',
+        { strokeDasharray: 700, strokeDashoffset: 700 },
+        { strokeDashoffset: 0, duration: 0.55, ease: "power2.out" },
+        1.05
+      );
+
+      // Sub fade in
+      tl.from(ROOT + ' .fs-sub', {
+        y: 22, opacity: 0, duration: 0.5, ease: "power2.out",
+      }, 1.2);
+
+      // ===== AMBIENT EFFECTS =====
+      // NUM breath pulse
+      const numCycle = 1.4;
+      const numRepeats = Math.max(1, Math.ceil(2.4 / numCycle) - 1);
+      tl.to(ROOT + ' .fs-num', {
+        scale: 1.06,
+        duration: numCycle / 2,
+        ease: "sine.inOut",
+        yoyo: true,
+        repeat: numRepeats,
+      }, 1.4);
+
+      // Badge subtle bounce
+      tl.to(ROOT + ' .badge', {
+        scale: 1.06,
+        duration: 0.7,
+        ease: "sine.inOut",
+        yoyo: true,
+        repeat: 2,
+      }, 1.5);
+
+      // Light sweep opacity pulse
+      tl.to(ROOT + ' .light-sweep', {
+        opacity: 0.6,
+        duration: 1.2,
+        ease: "sine.inOut",
+        yoyo: true,
+        repeat: 1,
+      }, 1.6);
+
+      window.__timelines["fs-lesson-3"] = tl;
+    </script>
+  </div>
+</template>

@@ -1,0 +1,182 @@
+<template id="captions-template">
+  <div data-composition-id="captions" data-start="0" data-width="1080" data-height="1920">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      [data-composition-id="captions"] {
+        width: 100%;
+        height: 100%;
+        background: transparent;
+        position: relative;
+        overflow: hidden;
+        pointer-events: none;
+      }
+      [data-composition-id="captions"] .caption-stage {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 280px;
+      }
+      [data-composition-id="captions"] .caption-group {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        padding: 0 60px;
+        box-sizing: border-box;
+        text-align: center;
+        opacity: 0;
+        visibility: hidden;
+        will-change: transform, opacity;
+      }
+      [data-composition-id="captions"] .caption-group .text {
+        display: inline-block;
+        font-family: 'Be Vietnam Pro', 'Inter', sans-serif;
+        font-weight: 700;
+        font-size: 58px;
+        line-height: 1.25;
+        color: #faf9f5;
+        background: rgba(20, 20, 19, 0.84);
+        padding: 18px 28px;
+        border-radius: 14px;
+        letter-spacing: -0.005em;
+        -webkit-text-stroke: 0;
+        box-shadow: 0 6px 20px rgba(20, 20, 19, 0.35);
+      }
+    </style>
+
+    <div class="caption-stage" id="caption-stage"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script>
+      window.__timelines = window.__timelines || {};
+
+      // ============ CAPTION GROUPS ============
+      // Pre-cleaned word groups from transcript.json (absolute timing 0-106.94s,
+      // matches captions sub-comp data-duration so internal timeline is RELATIVE = same).
+      const CAPTION_GROUPS = [
+        { text: "Dạo gần đây thì mình", start: 0.03, end: 0.89 },
+        { text: "hay theo dõi cách Alphabet", start: 0.89, end: 1.75 },
+        { text: "phát triển sản phẩm khá", start: 1.75, end: 3.02 },
+        { text: "là kỹ và thú thật", start: 3.02, end: 4.04 },
+        { text: "là mình học được rất", start: 4.04, end: 5.08 },
+        { text: "nhiều điều từ họ và", start: 5.08, end: 6.34 },
+        { text: "trong video hôm nay mình", start: 6.34, end: 7.17 },
+        { text: "có 3 bài học mình", start: 7.26, end: 8.07 },
+        { text: "muốn chia sẻ với các", start: 8.07, end: 8.92 },
+        { text: "bạn Bài học đầu tiên", start: 9.07, end: 9.97 },
+        { text: "mà mình học được đó", start: 9.97, end: 10.74 },
+        { text: "chính là dám đẩy sản", start: 10.74, end: 11.70 },
+        { text: "phẩm ra dưới dạng thử", start: 11.71, end: 12.66 },
+        { text: "nghiệm Họ gắn nhãn, đây", start: 12.96, end: 14.14 },
+        { text: "là cái bản dùng thử", start: 14.14, end: 14.97 },
+        { text: "họ không hứa rằng đây", start: 14.97, end: 15.92 },
+        { text: "sẽ là một cái sản", start: 16.07, end: 16.71 },
+        { text: "phẩm hoàn hảo họ không", start: 16.79, end: 17.95 },
+        { text: "cần tham vọng phải đầy", start: 17.95, end: 19.41 },
+        { text: "đủ hết Trước thì mình", start: 19.41, end: 20.48 },
+        { text: "hay giữ cái sản phẩm", start: 20.48, end: 21.37 },
+        { text: "của mình, khi nó hoàn", start: 21.40, end: 22.39 },
+        { text: "hảo thì mình mới đưa", start: 22.39, end: 23.40 },
+        { text: "ra và bây giờ mình", start: 23.40, end: 24.28 },
+        { text: "áp dụng, giống như cách", start: 24.28, end: 25.45 },
+        { text: "Alphabet đã làm, cứ đưa", start: 25.51, end: 26.71 },
+        { text: "ra trước, sau đó là", start: 26.71, end: 27.69 },
+        { text: "gắn nhãn dùng thử nghiệm", start: 27.69, end: 28.87 },
+        { text: "và xin ý kiến người", start: 29.26, end: 30.45 },
+        { text: "dùng phản hồi mình thấy", start: 30.53, end: 31.88 },
+        { text: "tốc độ phát triển phần", start: 31.88, end: 33.07 },
+        { text: "mềm nó ra nhanh hơn", start: 33.07, end: 33.87 },
+        { text: "rất nhiều Bài học thứ", start: 33.87, end: 35.37 },
+        { text: "2 đó chính là rút", start: 35.37, end: 36.63 },
+        { text: "ngắn từ ý tưởng, từ", start: 36.63, end: 38.30 },
+        { text: "người dùng cho đến người", start: 38.30, end: 40.52 },
+        { text: "phát triển Bên họ thì", start: 40.79, end: 42.22 },
+        { text: "người viết code sau này", start: 42.22, end: 43.18 },
+        { text: "đã đăng vào một kênh", start: 43.18, end: 44.06 },
+        { text: "chung, người viết nội dung", start: 44.06, end: 45.22 },
+        { text: "này, đẩy vào ngay này", start: 45.40, end: 46.24 },
+        { text: "Hôm sau đã thông báo", start: 46.24, end: 47.57 },
+        { text: "ra mắt, họ không xếp", start: 47.57, end: 49.22 },
+        { text: "hàng, họ không đợi đến", start: 49.22, end: 51.18 },
+        { text: "tuần sau và mình cũng", start: 51.18, end: 52.51 },
+        { text: "áp dụng, bằng cách bỏ", start: 52.51, end: 53.65 },
+        { text: "hẳn các thói quen để", start: 53.72, end: 54.60 },
+        { text: "cuối tuần mới làm, có", start: 54.75, end: 56.08 },
+        { text: "ý tưởng thì mình sẽ", start: 56.08, end: 56.92 },
+        { text: "làm ngay trong 24h, dù", start: 56.92, end: 58.26 },
+        { text: "nó nhỏ đến đâu sau", start: 58.26, end: 59.24 },
+        { text: "đó là ship một đợt", start: 59.24, end: 60.43 },
+        { text: "nhanh nhất có thể Bài", start: 60.43, end: 61.66 },
+        { text: "học thứ 3 mình muốn", start: 61.66, end: 62.62 },
+        { text: "chia sẻ cho mọi người", start: 62.62, end: 63.77 },
+        { text: "và chính là bài học", start: 63.77, end: 65.16 },
+        { text: "mình tâm đắc nhất là", start: 65.16, end: 66.86 },
+        { text: "không có gì gọi là", start: 66.86, end: 68.06 },
+        { text: "đợi xin phép cả Trên", start: 68.06, end: 69.56 },
+        { text: "team Alphabet, ai cũng được", start: 69.57, end: 71.68 },
+        { text: "tự mình, tự đề xuất một cái", start: 71.68, end: 73.35 },
+        { text: "idea, sau đó là họ", start: 73.35, end: 74.95 },
+        { text: "tự ship trong 1 tuần", start: 74.95, end: 76.90 },
+        { text: "Mình một mình thì đại", start: 76.94, end: 77.97 },
+        { text: "ca không có lý do", start: 77.97, end: 78.64 },
+        { text: "thì phải đợi Mình nhận", start: 78.64, end: 79.77 },
+        { text: "ra là cái rào cản", start: 79.81, end: 80.35 },
+        { text: "lớn nhất của một doanh", start: 80.35, end: 81.17 },
+        { text: "nghiệp đó chính là phải", start: 81.17, end: 81.93 },
+        { text: "quá nhiều người, quá nhiều", start: 82.03, end: 83.24 },
+        { text: "rào cản, họp hay các", start: 83.24, end: 84.66 },
+        { text: "kiểu Và tổng kết lại", start: 84.66, end: 86.45 },
+        { text: "3 bài học của mình", start: 86.45, end: 87.74 },
+        { text: "lúc kết hợp đó chính", start: 87.79, end: 88.48 },
+        { text: "là dám đẩy ra và", start: 88.48, end: 89.28 },
+        { text: "thử nghiệm rút ngắn đường", start: 89.28, end: 90.88 },
+        { text: "tới đến người dùng cuối", start: 90.88, end: 92.42 },
+        { text: "và bỏ thói quen tự", start: 92.42, end: 93.72 },
+        { text: "xin phép chính mình Nếu", start: 93.72, end: 95.37 },
+        { text: "như bạn thân tìm hiểu", start: 95.37, end: 96.76 },
+        { text: "về Code AI thì hãy", start: 96.76, end: 97.76 },
+        { text: "comment Code ở dưới, mình", start: 97.76, end: 99.27 },
+        { text: "sẽ gửi cho các bạn", start: 99.27, end: 99.83 },
+        { text: "các cái video hướng dẫn", start: 99.86, end: 101.00 },
+        { text: "mà mình đã chia sẻ", start: 101.00, end: 102.24 },
+        { text: "về cách ứng dụng Code AI", start: 102.31, end: 103.49 },
+        { text: "trong chính công việc cá", start: 103.53, end: 104.90 },
+        { text: "nhân và doanh nghiệp của", start: 104.90, end: 106.26 },
+        { text: "bạn nhé", start: 106.26, end: 106.94 },
+      ];
+
+      // Inject caption DOM (sync, before timeline construction)
+      const stage = document.getElementById("caption-stage");
+      CAPTION_GROUPS.forEach((g, i) => {
+        const wrap = document.createElement("div");
+        wrap.id = "cg-" + i;
+        wrap.className = "caption-group";
+        wrap.innerHTML = '<span class="text">' + g.text + "</span>";
+        stage.appendChild(wrap);
+      });
+
+      // ============ TIMELINE (relative 0 → 106.94) ============
+      const tl = gsap.timeline({ paused: true });
+
+      CAPTION_GROUPS.forEach((g, i) => {
+        const id = "#cg-" + i;
+        // Entrance — set to visible+y=18+opacity=0 just before start
+        tl.set(id, { opacity: 0, visibility: "visible", y: 18 }, g.start - 0.001);
+        // Animate to settle
+        tl.to(id, {
+          opacity: 1, y: 0, duration: 0.18, ease: "power2.out",
+        }, g.start);
+        // Hard kill at end (deterministic)
+        tl.set(id, { opacity: 0, visibility: "hidden" }, g.end);
+      });
+
+      window.__timelines["captions"] = tl;
+    </script>
+  </div>
+</template>

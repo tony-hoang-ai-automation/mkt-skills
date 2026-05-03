@@ -1,0 +1,398 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>{{PAGE_TITLE}}</title>
+<meta name="description" content="{{PAGE_DESCRIPTION}}" />
+
+<script src="https://cdn.tailwindcss.com?plugins=typography,forms"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      fontFamily: {
+        sans: ['Inter', 'system-ui', 'sans-serif'],
+        mono: ['"JetBrains Mono"', 'monospace'],
+        serif: ['"Instrument Serif"', 'serif'],
+      },
+      colors: {
+        ink: {
+          950: '#07070a', 900: '#0b0b10', 800: '#111119',
+          700: '#1a1a25', 600: '#262633', 500: '#3a3a4a',
+        },
+        // Claude / Anthropic
+        claude: {
+          DEFAULT: '#DA7756',
+          50:'#fbeee7',100:'#f6dccd',200:'#edb89c',300:'#e3946c',400:'#da7756',500:'#c45f3d',600:'#9a4a30',700:'#6e3422',
+        },
+        // DeepSeek
+        deepseek: {
+          DEFAULT: '#4D6BFE',
+          50:'#eaeefe',100:'#d4ddfd',200:'#a9bbfb',300:'#7e98f9',400:'#4d6bfe',500:'#3b53cc',600:'#2a3d99',700:'#1a2666',
+        },
+        // OpenAI
+        openai:    { DEFAULT: '#10A37F', 200:'#7DD8C2', 300:'#4FC2A1' },
+        // Google / Gemini
+        google:    { DEFAULT: '#4285F4', 200:'#A1B9F9', 300:'#7DA0F7' },
+        // Mistral
+        mistral:   { DEFAULT: '#FF6B35', 200:'#FFB59A', 300:'#FF9168' },
+        // Perplexity
+        perplexity:{ DEFAULT: '#20808D', 200:'#7BC0C9', 300:'#4DA0AB' },
+        // xAI / Grok
+        xai:       { DEFAULT: '#1DA1F2', 200:'#8FD0F9', 300:'#5DBAF6' },
+        // Meta / Llama
+        meta:      { DEFAULT: '#0467DF', 200:'#82B3EF', 300:'#4D8DE9' },
+        // Microsoft / Copilot
+        msft:      { DEFAULT: '#0078D4', 200:'#7FBBE9', 300:'#4D9DDF' },
+        accent: {
+          green:  '#3FCF8E',
+          purple: '#A78BFA',
+          amber:  '#F4B860',
+          pink:   '#F472B6',
+          cyan:   '#22D3EE',
+          red:    '#F87171',
+        }
+      },
+      letterSpacing: { tightest: '-0.04em' },
+    }
+  }
+};
+</script>
+
+<style>
+  :root { color-scheme: dark; }
+  html { scroll-behavior: smooth; }
+  body {
+    background:
+      radial-gradient(1200px 600px at 50% -200px, rgba(218,119,86,0.10), transparent 60%),
+      radial-gradient(900px 500px at 90% 30%, rgba(77,107,254,0.08), transparent 60%),
+      #07070a;
+    color: #ECECEF;
+    font-feature-settings: "ss01", "cv11";
+  }
+  .grain::before {
+    content:""; position: fixed; inset:0; pointer-events:none; opacity:.035; z-index:0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.5 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* ========= Vertical connector line giữa 2 section (ANIMATED) ========= */
+  .connector { position: relative; height: 200px; display:flex; align-items:center; justify-content:center; overflow: hidden; }
+  /* Đường gradient chính + animated flow */
+  .connector::before {
+    content:""; position:absolute; left:50%; top:0; bottom:0;
+    width:1.5px; transform: translateX(-0.75px);
+    background: linear-gradient(to bottom,
+      rgba(255,255,255,0) 0%,
+      rgba(218,119,86,0.15) 8%,
+      rgba(218,119,86,0.7) 25%,
+      rgba(167,139,250,0.7) 50%,
+      rgba(77,107,254,0.7) 75%,
+      rgba(77,107,254,0.15) 92%,
+      rgba(255,255,255,0) 100%);
+    background-size: 100% 300%;
+    animation: connector-flow 6s ease-in-out infinite;
+    box-shadow: 0 0 20px rgba(218,119,86,0.3), 0 0 40px rgba(77,107,254,0.18);
+  }
+  /* Pulse dot di chuyển xuống */
+  .connector::after {
+    content:""; position:absolute; left:50%; top:0;
+    width:8px; height:8px; border-radius:50%;
+    transform: translateX(-50%);
+    background: radial-gradient(circle, #fff 0%, #DA7756 40%, rgba(218,119,86,0) 70%);
+    box-shadow: 0 0 12px rgba(255,255,255,0.6), 0 0 24px rgba(218,119,86,0.5);
+    animation: connector-travel 4s linear infinite;
+  }
+  @keyframes connector-flow {
+    0%   { background-position: 0% 200%; }
+    50%  { background-position: 0% 0%;   }
+    100% { background-position: 0% -200%; }
+  }
+  @keyframes connector-travel {
+    0%   { top: -8px;   opacity: 0; transform: translateX(-50%) scale(0.6); }
+    10%  { opacity: 1;  transform: translateX(-50%) scale(1); }
+    50%  { background: radial-gradient(circle, #fff 0%, #A78BFA 40%, rgba(167,139,250,0) 70%);
+           box-shadow: 0 0 12px rgba(255,255,255,0.6), 0 0 24px rgba(167,139,250,0.5); }
+    90%  { opacity: 1;  transform: translateX(-50%) scale(1); }
+    100% { top: calc(100% + 8px); opacity: 0;
+           background: radial-gradient(circle, #fff 0%, #4D6BFE 40%, rgba(77,107,254,0) 70%);
+           box-shadow: 0 0 12px rgba(255,255,255,0.6), 0 0 24px rgba(77,107,254,0.5);
+           transform: translateX(-50%) scale(0.6); }
+  }
+  /* Variant 2 màu khác: thêm class .connector.connector-{brandA}-{brandB} và override 2 stop màu */
+  /* Tắt animation khi user bật reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    .connector::before { animation: none; background-position: 0% 50%; }
+    .connector::after  { display: none; }
+  }
+
+  .vline { width:1px; height: 80px; margin: 0 auto;
+    background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0.18), rgba(255,255,255,0)); }
+
+  /* ========= Section badge pill ========= */
+  .badge {
+    display:inline-flex; align-items:center; gap:.6rem;
+    padding:.45rem 1rem; border-radius: 999px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px; letter-spacing: .14em;
+    border:1px solid rgba(255,255,255,0.12);
+    background: rgba(20,20,28,0.7); backdrop-filter: blur(8px);
+    color:#cfcfd6;
+  }
+  .badge .dot { width:8px; height:8px; border-radius: 999px; }
+
+  /* ========= Gradient highlights cho keyword ========= */
+  .grad-claude    { background: linear-gradient(90deg, #F2A07A 0%, #DA7756 50%, #C25A38 100%); -webkit-background-clip: text; background-clip:text; color: transparent; }
+  .grad-deepseek  { background: linear-gradient(90deg, #8FA4FF 0%, #4D6BFE 60%, #2C46C9 100%); -webkit-background-clip: text; background-clip:text; color: transparent; }
+  .grad-green     { background: linear-gradient(90deg, #6EE7B7 0%, #3FCF8E 60%, #18A06A 100%); -webkit-background-clip: text; background-clip:text; color: transparent; }
+  .grad-amber     { background: linear-gradient(90deg, #F8D389 0%, #F4B860 60%, #D08A2A 100%); -webkit-background-clip: text; background-clip:text; color: transparent; }
+  .grad-purple    { background: linear-gradient(90deg, #C4B5FD 0%, #A78BFA 60%, #7C3AED 100%); -webkit-background-clip: text; background-clip:text; color: transparent; }
+  .grad-openai    { background: linear-gradient(90deg, #7DD8C2 0%, #10A37F 60%, #0A6E55 100%); -webkit-background-clip: text; background-clip:text; color: transparent; }
+  .grad-google    { background: linear-gradient(90deg, #A1B9F9 0%, #4285F4 60%, #1A4FB6 100%); -webkit-background-clip: text; background-clip:text; color: transparent; }
+  .grad-mistral   { background: linear-gradient(90deg, #FFB59A 0%, #FF6B35 60%, #C04A1F 100%); -webkit-background-clip: text; background-clip:text; color: transparent; }
+
+  /* ========= Big display heading ========= */
+  .display { font-weight: 700; letter-spacing: -0.04em; line-height: 0.98; }
+
+  /* ========= Card ========= */
+  .card {
+    border: 1px solid rgba(255,255,255,0.08);
+    background: linear-gradient(180deg, rgba(20,20,28,0.6) 0%, rgba(12,12,18,0.6) 100%);
+    border-radius: 18px; backdrop-filter: blur(8px);
+  }
+  .card-hover { transition: transform .25s ease, border-color .25s ease, background .25s ease; }
+  .card-hover:hover { border-color: rgba(255,255,255,0.18); transform: translateY(-2px); }
+
+  /* ========= Pill (top of hero) ========= */
+  .pill {
+    display:inline-flex; align-items:center; gap:.55rem;
+    padding:.5rem 1rem; border-radius: 999px;
+    border:1px solid rgba(255,255,255,0.12);
+    background: rgba(18,18,26,0.7); backdrop-filter: blur(10px);
+    font-size: 13.5px; color:#E8E8EC; font-weight: 500;
+  }
+  .pill svg { width:16px; height:16px; }
+
+  /* ========= Image placeholder ========= */
+  .ph {
+    border: 1.5px dashed rgba(255,255,255,0.18);
+    background:
+      repeating-linear-gradient(45deg, rgba(255,255,255,0.015) 0 12px, rgba(255,255,255,0) 12px 24px),
+      radial-gradient(800px 300px at 50% 50%, rgba(218,119,86,0.06), transparent 70%),
+      rgba(12,12,18,0.6);
+    border-radius: 22px; position:relative;
+  }
+  .ph .ph-tag {
+    position:absolute; top: 18px; left: 18px;
+    font-family: "JetBrains Mono", monospace; font-size: 11px;
+    letter-spacing: .14em; color: #DA7756;
+    background: rgba(0,0,0,0.55);
+    border:1px solid rgba(218,119,86,0.4);
+    padding: .35rem .65rem; border-radius: 999px;
+  }
+  .ph .ph-aspect {
+    position:absolute; top: 18px; right: 18px;
+    font-family: "JetBrains Mono", monospace; font-size: 11px;
+    letter-spacing: .14em; color:#9aa0aa;
+    background: rgba(0,0,0,0.45);
+    border:1px solid rgba(255,255,255,0.1);
+    padding: .35rem .65rem; border-radius: 999px;
+  }
+  .ph .ph-center {
+    position:absolute; inset:0; display:flex; flex-direction:column;
+    align-items:center; justify-content:center;
+    color: rgba(255,255,255,0.55); text-align:center; padding: 24px;
+  }
+  .ph .ph-center .icon-box {
+    width: 56px; height: 56px; border-radius: 14px;
+    background: rgba(218,119,86,0.12);
+    border: 1px solid rgba(218,119,86,0.35);
+    display:flex; align-items:center; justify-content:center; margin-bottom: 14px;
+  }
+  /* Khi <img> load thành công, ẩn các phần placeholder */
+  .ph.img-loaded { border: none; background: transparent; padding: 0; }
+  .ph.img-loaded > :not(img) { display: none !important; }
+  .ph img { display: block; }
+
+  /* ========= Scroll reveal (subtle fade-up) ========= */
+  .reveal { opacity: 0; transform: translateY(24px); transition: opacity .8s ease, transform .8s ease; }
+  .reveal.in { opacity: 1; transform: translateY(0); }
+  @media (prefers-reduced-motion: reduce) {
+    .reveal { opacity: 1; transform: none; transition: none; }
+  }
+
+  /* ========= Hover lift cho card-hover (override mặc định mượt hơn) ========= */
+  .card-hover { transition: transform .35s cubic-bezier(.2,.8,.2,1), border-color .35s ease, background .35s ease, box-shadow .35s ease; }
+  .card-hover:hover {
+    border-color: rgba(255,255,255,0.22);
+    transform: translateY(-3px);
+    box-shadow: 0 20px 60px -20px rgba(0,0,0,0.5), 0 0 0 1px rgba(218,119,86,0.08);
+  }
+
+  /* ========= Code block ========= */
+  .code {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 13.5px; line-height: 1.7;
+    background: #07070a;
+    border:1px solid rgba(255,255,255,0.08);
+    border-radius: 14px; color:#E1E1E6;
+  }
+  .code .c-prompt { color:#5b5b66; }
+  .code .c-cmd    { color:#fff; }
+  .code .c-com    { color:#6c6c78; }
+  .code .c-str    { color:#F4B860; }
+  .code .c-key    { color:#DA7756; }
+  .code .c-num    { color:#3FCF8E; }
+  .code .c-blue   { color:#8FA4FF; }
+
+  /* ========= Step number (serif italic gradient) ========= */
+  .step-num {
+    font-family: "Instrument Serif", serif; font-style: italic;
+    font-size: 56px; line-height: 1;
+    background: linear-gradient(180deg, #DA7756 0%, rgba(218,119,86,0.2) 100%);
+    -webkit-background-clip: text; background-clip:text; color: transparent;
+  }
+
+  /* ========= Compare chip ========= */
+  .chip-good    { color:#6EE7B7; background: rgba(63,207,142,0.08); border:1px solid rgba(63,207,142,0.25); }
+  .chip-bad     { color:#F87171; background: rgba(248,113,113,0.08); border:1px solid rgba(248,113,113,0.25); }
+  .chip-neutral { color:#cfcfd6; background: rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.1); }
+
+  /* ========= Nav ========= */
+  .nav-link { color:#cfcfd6; transition: color .2s; }
+  .nav-link:hover { color:#fff; }
+
+  /* ========= Decorative orbit blur ========= */
+  .orbit {
+    position:absolute; pointer-events:none; opacity:.55;
+    background:
+      radial-gradient(closest-side, rgba(77,107,254,0.18), transparent 70%),
+      radial-gradient(closest-side, rgba(218,119,86,0.18), transparent 70%);
+    filter: blur(40px);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+  }
+</style>
+</head>
+
+<body class="grain antialiased">
+
+<!-- ============== NAV (floating pill) ============== -->
+<header class="fixed top-4 inset-x-4 z-50 flex justify-center pointer-events-none">
+  <nav class="pointer-events-auto flex items-center gap-2 px-3 py-2 rounded-full border border-white/10 bg-ink-900/70 backdrop-blur-xl">
+    <a href="#hero" class="flex items-center gap-2 pl-2 pr-3 py-1.5">
+      <span class="w-6 h-6 rounded-md bg-claude/20 border border-claude/40 flex items-center justify-center">
+        <span class="w-2 h-2 rounded-full bg-claude"></span>
+      </span>
+      <span class="text-sm font-semibold tracking-tight">{{BRAND_LABEL}}</span>
+    </a>
+    <span class="hidden md:flex items-center gap-1 text-[13px] ml-2">
+      <!-- Inject section nav links here -->
+      <!-- <a class="nav-link px-3 py-1.5 rounded-full hover:bg-white/5" href="#section-id">Tên</a> -->
+    </span>
+    <a href="#start" class="ml-1 hidden sm:inline-flex items-center gap-1.5 cursor-pointer pl-3 pr-3 py-1.5 rounded-full bg-white text-ink-900 text-[13px] font-semibold hover:bg-white/90 transition-colors">
+      {{PRIMARY_CTA_LABEL}}
+      <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+    </a>
+  </nav>
+</header>
+
+<main class="relative z-10">
+
+  <!-- ============== HERO (inject snippet) ============== -->
+  <!-- See references/section-patterns.md → "hero" -->
+
+  <!-- ============== CONNECTOR ============== -->
+  <div class="connector"></div>
+
+  <!-- ============== SECTION 01 (inject snippet) ============== -->
+  <!-- See references/section-patterns.md → choose pattern -->
+
+  <!-- ============== CONNECTOR ============== -->
+  <div class="connector"></div>
+
+  <!-- ... repeat for each section ... -->
+
+</main>
+
+<!-- ============== FOOTER ============== -->
+<footer class="border-t border-white/8 py-10 px-6 relative z-10">
+  <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-white/45">
+    <div class="flex items-center gap-2">
+      <span class="w-5 h-5 rounded-md bg-claude/20 border border-claude/40 flex items-center justify-center">
+        <span class="w-1.5 h-1.5 rounded-full bg-claude"></span>
+      </span>
+      <span class="font-mono text-[12px] tracking-wide">{{FOOTER_LABEL}}</span>
+    </div>
+    <div class="font-mono text-[12px] flex items-center gap-4">
+      <span>v1.0 · {{YEAR}}</span>
+      <a href="#hero" class="hover:text-white inline-flex items-center gap-1.5">
+        <i data-lucide="arrow-up" class="w-3.5 h-3.5"></i> Về đầu trang
+      </a>
+    </div>
+  </div>
+</footer>
+
+<!-- ============== SCRIPTS ============== -->
+<script>
+  // Lucide icons
+  if (window.lucide) lucide.createIcons();
+
+  // Copy helper — IMPORTANT: dùng textContent vì element prompt là sr-only
+  function copyText(id, ev){
+    const el = document.getElementById(id);
+    if (!el) return;
+    const text = (el.textContent || '').trim();
+    navigator.clipboard.writeText(text).then(()=>{
+      const btn = (ev && ev.currentTarget) || (window.event && window.event.currentTarget);
+      if (!btn) return;
+      const old = btn.innerHTML;
+      btn.innerHTML = '<i data-lucide="check" class="w-3.5 h-3.5"></i> Đã copy';
+      lucide.createIcons();
+      setTimeout(()=>{ btn.innerHTML = old; lucide.createIcons(); }, 1400);
+    });
+  }
+
+  // Scroll-reveal — fade-up khi section vào viewport
+  (function(){
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduce) {
+      document.querySelectorAll('.reveal').forEach(el => el.classList.add('in'));
+      return;
+    }
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('in');
+          obs.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+    document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+  })();
+
+  // Chart.js init (uncomment + customize nếu có chart section)
+  /*
+  (function(){
+    const ctx = document.getElementById('chartCanvas');
+    if (!ctx) return;
+    new Chart(ctx, {
+      type: 'bar',
+      data: { labels: [...], datasets: [...] },
+      options: { ... }
+    });
+  })();
+  */
+</script>
+</body>
+</html>

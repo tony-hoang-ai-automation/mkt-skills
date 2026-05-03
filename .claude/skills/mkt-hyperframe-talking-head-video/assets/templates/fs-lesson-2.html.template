@@ -1,0 +1,249 @@
+<template id="fs-lesson-2-template">
+  <div data-composition-id="fs-lesson-2" data-start="0" data-width="1080" data-height="1920">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      [data-composition-id="fs-lesson-2"] {
+        width: 100%;
+        height: 100%;
+        background: #faf9f5;
+        color: #141413;
+        position: relative;
+        overflow: hidden;
+        font-family: 'Be Vietnam Pro', 'Inter', Arial, sans-serif;
+      }
+      /* Speed lines streaking from edges (8 lines, alternating sides) */
+      [data-composition-id="fs-lesson-2"] .speed-line {
+        position: absolute;
+        height: 4px;
+        background: #d97757;
+        border-radius: 2px;
+        z-index: 0;
+        pointer-events: none;
+        opacity: 0;
+      }
+      [data-composition-id="fs-lesson-2"] .speed-line.l1 { top: 18%;  left: -200px; width: 240px; }
+      [data-composition-id="fs-lesson-2"] .speed-line.l2 { top: 25%;  left: -160px; width: 180px; height: 3px; }
+      [data-composition-id="fs-lesson-2"] .speed-line.l3 { top: 78%;  left: -180px; width: 200px; }
+      [data-composition-id="fs-lesson-2"] .speed-line.l4 { top: 86%;  left: -140px; width: 160px; height: 3px; }
+      [data-composition-id="fs-lesson-2"] .speed-line.r1 { top: 22%;  right: -200px; width: 240px; }
+      [data-composition-id="fs-lesson-2"] .speed-line.r2 { top: 30%;  right: -160px; width: 180px; height: 3px; }
+      [data-composition-id="fs-lesson-2"] .speed-line.r3 { top: 75%;  right: -180px; width: 200px; }
+      [data-composition-id="fs-lesson-2"] .speed-line.r4 { top: 82%;  right: -140px; width: 160px; height: 3px; }
+
+      /* Corner accent ticks */
+      [data-composition-id="fs-lesson-2"] .corner-tick {
+        position: absolute;
+        font-family: 'Be Vietnam Pro', 'Inter', sans-serif;
+        font-weight: 700;
+        font-size: 24px;
+        letter-spacing: 0.18em;
+        color: #d97757;
+        z-index: 5;
+      }
+      [data-composition-id="fs-lesson-2"] .corner-tick.tl { top: 70px; left: 80px; }
+      [data-composition-id="fs-lesson-2"] .corner-tick.br { bottom: 70px; right: 80px; }
+
+      /* Bg dotted pattern subtle */
+      [data-composition-id="fs-lesson-2"] .bg-dots {
+        position: absolute; inset: 0;
+        background-image: radial-gradient(circle, rgba(217, 119, 87, 0.12) 1.5px, transparent 1.5px);
+        background-size: 36px 36px;
+        z-index: 0;
+        pointer-events: none;
+      }
+
+      [data-composition-id="fs-lesson-2"] .scene-content {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        padding: 220px 80px 380px;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        z-index: 2;
+      }
+      [data-composition-id="fs-lesson-2"] .fs-eyebrow {
+        font-weight: 600;
+        font-size: 32px;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        color: #d97757;
+        margin-bottom: 18px;
+      }
+      [data-composition-id="fs-lesson-2"] .fs-num {
+        font-weight: 800;
+        font-size: 240px;
+        line-height: 0.86;
+        letter-spacing: -0.05em;
+        font-variant-numeric: tabular-nums;
+        margin-bottom: 12px;
+        color: #d97757;
+      }
+      [data-composition-id="fs-lesson-2"] .fs-title {
+        font-weight: 800;
+        font-size: 130px;
+        line-height: 1.1;
+        letter-spacing: -0.02em;
+        margin: 0 0 24px;
+      }
+      [data-composition-id="fs-lesson-2"] .fs-title .word {
+        display: inline-block;
+        will-change: transform, opacity;
+      }
+      [data-composition-id="fs-lesson-2"] .fs-title .countup {
+        display: inline-block;
+        font-variant-numeric: tabular-nums;
+        min-width: 1.8em;
+        text-align: center;
+      }
+      [data-composition-id="fs-lesson-2"] .fs-title .accent { color: #d97757; }
+      [data-composition-id="fs-lesson-2"] .fs-sub {
+        font-style: italic;
+        font-weight: 500;
+        font-size: 38px;
+        line-height: 1.35;
+        max-width: 800px;
+        opacity: 0.78;
+        margin-top: 6px;
+      }
+    </style>
+
+    <div class="bg-dots"></div>
+    <div class="speed-line l1"></div>
+    <div class="speed-line l2"></div>
+    <div class="speed-line l3"></div>
+    <div class="speed-line l4"></div>
+    <div class="speed-line r1"></div>
+    <div class="speed-line r2"></div>
+    <div class="speed-line r3"></div>
+    <div class="speed-line r4"></div>
+
+    <div class="corner-tick tl">⏱ FAST</div>
+    <div class="corner-tick br">SHIP NOW ›</div>
+
+    <div class="scene-content">
+      <div class="fs-eyebrow">Bài học #2</div>
+      <div class="fs-num">02</div>
+      <div class="fs-title">
+        <span class="word">Ship</span>
+        <span class="word">trong</span><br />
+        <span class="word accent"><span class="countup" id="cu-24">0</span> giờ</span>
+      </div>
+      <div class="fs-sub">Có ý tưởng là làm — không đợi cuối tuần</div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+      const ROOT = '[data-composition-id="fs-lesson-2"]';
+
+      // Punch zoom-OUT entrance (alternating direction with lesson 1)
+      tl.from(ROOT + ' .scene-content', {
+        scale: 0.92, opacity: 0, duration: 0.42, ease: "back.out(1.5)",
+      }, 0);
+
+      // Bg dots fade in
+      tl.from(ROOT + ' .bg-dots', {
+        opacity: 0, duration: 0.7, ease: "power2.out",
+      }, 0.1);
+
+      // Speed lines streak in from edges
+      tl.fromTo(ROOT + ' .speed-line',
+        { x: 0, opacity: 0 },
+        {
+          x: (i, el) => el.classList.contains('l1') || el.classList.contains('l2') || el.classList.contains('l3') || el.classList.contains('l4') ? 1280 : -1280,
+          opacity: 0.7,
+          duration: 0.7,
+          ease: "power3.out",
+          stagger: 0.04,
+        },
+        0.15
+      );
+      // Speed lines fade out
+      tl.to(ROOT + ' .speed-line', {
+        opacity: 0, duration: 0.4, ease: "power2.in",
+      }, 0.95);
+
+      // Corner ticks fade in
+      tl.from(ROOT + ' .corner-tick', {
+        x: -30, opacity: 0, duration: 0.5, ease: "power3.out",
+        stagger: 0.12,
+      }, 0.4);
+
+      // Eyebrow + NUM
+      tl.from(ROOT + ' .fs-eyebrow', {
+        y: -22, opacity: 0, duration: 0.45, ease: "power3.out",
+      }, 0.25);
+      tl.from(ROOT + ' .fs-num', {
+        scale: 0.5, opacity: 0, rotation: 8, duration: 0.65, ease: "back.out(1.6)",
+      }, 0.35);
+
+      // Title — word slam stagger
+      tl.from(ROOT + ' .fs-title .word', {
+        y: -50, opacity: 0, scale: 1.6,
+        duration: 0.5, ease: "back.out(1.8)",
+        stagger: 0.07,
+      }, 0.55);
+
+      // Count-up "24 giờ" — tick from 0 → 24
+      tl.fromTo(ROOT + ' #cu-24',
+        { innerText: 0 },
+        {
+          innerText: 24,
+          duration: 0.7,
+          ease: "power2.out",
+          snap: { innerText: 1 },
+        },
+        0.95
+      );
+
+      // Sub fade in
+      tl.from(ROOT + ' .fs-sub', {
+        y: 22, opacity: 0, duration: 0.5, ease: "power2.out",
+      }, 1.1);
+
+      // ===== AMBIENT EFFECTS =====
+      // NUM breath pulse
+      const numCycle = 1.4;
+      const numRepeats = Math.max(1, Math.ceil(1.8 / numCycle) - 1);
+      tl.to(ROOT + ' .fs-num', {
+        scale: 1.05,
+        duration: numCycle / 2,
+        ease: "sine.inOut",
+        yoyo: true,
+        repeat: numRepeats,
+      }, 1.4);
+
+      // 24 number subtle scale pulse after count-up settles
+      tl.to(ROOT + ' #cu-24', {
+        scale: 1.08,
+        duration: 0.6,
+        ease: "sine.inOut",
+        yoyo: true,
+        repeat: 1,
+        transformOrigin: "center",
+      }, 1.7);
+
+      // Corner ticks blink
+      tl.to(ROOT + ' .corner-tick.br', {
+        opacity: 0.5,
+        duration: 0.4,
+        ease: "sine.inOut",
+        yoyo: true,
+        repeat: 3,
+      }, 1.5);
+
+      window.__timelines["fs-lesson-2"] = tl;
+    </script>
+  </div>
+</template>

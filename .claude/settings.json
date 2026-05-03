@@ -11,19 +11,6 @@
       "Bash(npm:*)"
     ]
   },
-  "hooks": {
-    "PostToolUse": [
-      {
-        "matcher": "Write|Edit",
-        "hooks": [
-          {
-            "type": "prompt",
-            "prompt": "Check if a skill was just created or renamed in .claude/skills/. If so, update the CLAUDE.md routing table to include it. Only update if the skill is new or the name changed."
-          }
-        ]
-      }
-    ]
-  },
   "enabledPlugins": {
     "claude-mem@thedotmack": true
   }

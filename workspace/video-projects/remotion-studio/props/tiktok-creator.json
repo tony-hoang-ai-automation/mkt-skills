@@ -1,0 +1,138 @@
+{
+  "videoPath": "media/mcp-video/source.mp4",
+  "videoStartSec": 0,
+  "durationSeconds": 96.8,
+  "hookBoostSec": 5,
+  "showProgressBar": true,
+  "footerText": "@tranvanhoang.com",
+  "volume": 1,
+  "iconOverlays": [
+    {
+      "iconPath": "media/mcp-icons/claude.svg",
+      "startSec": 0.7,
+      "endSec": 5.0,
+      "label": "CLAUDE + MCP",
+      "bgColor": "#FFE6D5",
+      "size": 240,
+      "position": "top"
+    },
+    {
+      "iconPath": "media/mcp-icons/gmail.svg",
+      "startSec": 15.08,
+      "endSec": 19.5,
+      "label": "#1 GMAIL MCP",
+      "bgColor": "#ffffff",
+      "size": 260,
+      "position": "top"
+    },
+    {
+      "iconPath": "media/mcp-icons/vercel.svg",
+      "startSec": 25.14,
+      "endSec": 29.5,
+      "label": "#2 VERCEL MCP",
+      "bgColor": "#000000",
+      "size": 260,
+      "position": "top"
+    },
+    {
+      "iconPath": "media/mcp-icons/clarity.png",
+      "startSec": 37.68,
+      "endSec": 42.0,
+      "label": "#3 MS CLARITY",
+      "bgColor": "#ffffff",
+      "size": 260,
+      "position": "top"
+    },
+    {
+      "iconPath": "media/mcp-icons/apify.png",
+      "startSec": 51.4,
+      "endSec": 55.8,
+      "label": "#4 APIFY MCP",
+      "bgColor": "#ffffff",
+      "size": 260,
+      "position": "top"
+    },
+    {
+      "iconPath": "media/mcp-icons/canva.svg",
+      "startSec": 69.88,
+      "endSec": 74.5,
+      "label": "#5 CANVA MCP",
+      "bgColor": "#ffffff",
+      "size": 260,
+      "position": "top"
+    }
+  ],
+  "captions": [
+    { "text": "CLAUDE AI GIỜ KHÔNG CÒN LÀ CHATBOT", "startSec": 0.7, "endSec": 3.76, "style": "hook", "textEffect": "slam", "highlights": ["CHATBOT"], "captionPosition": 70 },
+    { "text": "Claude Code có 1 tính năng cực kỳ quan trọng", "startSec": 3.76, "endSec": 5.82, "style": "normal", "textEffect": "word-by-word", "highlights": ["quan trọng"], "captionPosition": 70 },
+    { "text": "Giống như cánh tay nối dài của Claude", "startSec": 5.82, "endSec": 7.80, "style": "normal", "textEffect": "word-by-word", "highlights": ["cánh tay nối dài"], "captionPosition": 70 },
+    { "text": "Kết nối vào các phần mềm khác để làm việc hộ mình", "startSec": 7.80, "endSec": 11.10, "style": "solution", "textEffect": "word-by-word", "highlights": ["làm việc hộ mình"], "captionPosition": 70 },
+    { "text": "Chia sẻ 5 MCP mình hay dùng", "startSec": 11.10, "endSec": 13.14, "style": "hook", "textEffect": "slam", "highlights": ["5 MCP"], "captionPosition": 70 },
+    { "text": "MCP mình hay dùng nè", "startSec": 13.58, "endSec": 15.08, "style": "normal", "textEffect": "word-by-word", "captionPosition": 70 },
+
+    { "text": "Thứ nhất: GMAIL CONNECTOR", "startSec": 15.08, "endSec": 16.86, "style": "hook", "textEffect": "slam", "highlights": ["GMAIL"], "captionPosition": 70 },
+    { "text": "Tự động phân loại email hàng ngày", "startSec": 16.86, "endSec": 19.28, "style": "normal", "textEffect": "word-by-word", "highlights": ["phân loại"], "captionPosition": 70 },
+    { "text": "Lọc email quan trọng, soạn thư nháp để mình trả lời", "startSec": 19.28, "endSec": 22.20, "style": "normal", "textEffect": "word-by-word", "highlights": ["quan trọng", "nháp"], "captionPosition": 70 },
+    { "text": "Kết hợp với tính năng Skills cực mạnh", "startSec": 22.20, "endSec": 23.74, "style": "normal", "textEffect": "word-by-word", "highlights": ["Skills"], "captionPosition": 70 },
+    { "text": "Giờ mình phản hồi hoàn toàn tự động", "startSec": 23.74, "endSec": 25.14, "style": "solution", "textEffect": "word-by-word", "highlights": ["tự động"], "captionPosition": 70 },
+
+    { "text": "Thứ hai: VERCEL MCP", "startSec": 25.14, "endSec": 27.54, "style": "hook", "textEffect": "slam", "highlights": ["VERCEL"], "captionPosition": 70 },
+    { "text": "Nếu bạn làm việc với Claude Code sẽ mê cái này", "startSec": 27.54, "endSec": 30.06, "style": "normal", "textEffect": "word-by-word", "highlights": ["Claude Code"], "captionPosition": 70 },
+    { "text": "Claude giờ deploy Vercel miễn phí", "startSec": 30.06, "endSec": 32.82, "style": "solution", "textEffect": "word-by-word", "highlights": ["miễn phí"], "captionPosition": 70 },
+    { "text": "Không cần mở terminal, không cần git commit", "startSec": 32.82, "endSec": 34.82, "style": "normal", "textEffect": "word-by-word", "highlights": ["terminal", "git"], "captionPosition": 70 },
+    { "text": "Cực dễ dùng cho anh chị không phải lập trình viên", "startSec": 34.82, "endSec": 37.68, "style": "normal", "textEffect": "word-by-word", "highlights": ["Cực dễ"], "captionPosition": 70 },
+
+    { "text": "Thứ ba: MICROSOFT CLARITY MCP", "startSec": 37.68, "endSec": 40.06, "style": "hook", "textEffect": "slam", "highlights": ["CLARITY"], "captionPosition": 70 },
+    { "text": "Dành riêng cho bạn chạy quảng cáo", "startSec": 40.06, "endSec": 41.94, "style": "normal", "textEffect": "word-by-word", "highlights": ["quảng cáo"], "captionPosition": 70 },
+    { "text": "Claude phân tích hành vi User Session Recording", "startSec": 41.94, "endSec": 45.72, "style": "normal", "textEffect": "word-by-word", "highlights": ["hành vi"], "captionPosition": 70 },
+    { "text": "Chỗ nào họ rời đi, chỗ nào họ ở lại", "startSec": 45.72, "endSec": 47.38, "style": "normal", "textEffect": "word-by-word", "captionPosition": 70 },
+    { "text": "Biết luôn tại sao user chưa mua hàng", "startSec": 47.38, "endSec": 49.98, "style": "pain", "textEffect": "word-by-word", "highlights": ["chưa mua"], "captionPosition": 70 },
+    { "text": "Để mình tối ưu", "startSec": 49.98, "endSec": 50.80, "style": "solution", "textEffect": "word-by-word", "highlights": ["tối ưu"], "captionPosition": 70 },
+
+    { "text": "Thứ tư: APIFY MCP", "startSec": 51.40, "endSec": 53.64, "style": "hook", "textEffect": "slam", "highlights": ["APIFY"], "captionPosition": 70 },
+    { "text": "Cái này mình mê nhất luôn", "startSec": 53.64, "endSec": 54.90, "style": "normal", "textEffect": "word-by-word", "highlights": ["mê nhất"], "captionPosition": 70 },
+    { "text": "Hàng ngày có khối content hay từ TikTok", "startSec": 54.90, "endSec": 57.90, "style": "normal", "textEffect": "word-by-word", "highlights": ["TikTok"], "captionPosition": 70 },
+    { "text": "Facebook, YouTube, Instagram", "startSec": 57.90, "endSec": 59.20, "style": "normal", "textEffect": "word-by-word", "highlights": ["Facebook", "YouTube", "Instagram"], "captionPosition": 70 },
+    { "text": "Từ các anh chị chuyên gia", "startSec": 59.66, "endSec": 61.14, "style": "normal", "textEffect": "word-by-word", "captionPosition": 70 },
+    { "text": "Theo dõi, nhờ Claude phân tích", "startSec": 61.14, "endSec": 63.16, "style": "normal", "textEffect": "word-by-word", "highlights": ["Claude"], "captionPosition": 70 },
+    { "text": "Chuyện gì, hook ra sao, format ra sao", "startSec": 63.62, "endSec": 65.18, "style": "normal", "textEffect": "word-by-word", "highlights": ["hook", "format"], "captionPosition": 70 },
+    { "text": "Để mình làm content hay hơn", "startSec": 66.08, "endSec": 68.04, "style": "solution", "textEffect": "word-by-word", "highlights": ["hay hơn"], "captionPosition": 70 },
+
+    { "text": "Và cuối cùng...", "startSec": 68.84, "endSec": 69.88, "style": "normal", "textEffect": "word-by-word", "captionPosition": 70 },
+    { "text": "CANVA MCP", "startSec": 69.88, "endSec": 71.14, "style": "hook", "textEffect": "slam", "highlights": ["CANVA"], "captionPosition": 70 },
+    { "text": "Tool collab cho việc thiết kế", "startSec": 71.76, "endSec": 74.96, "style": "normal", "textEffect": "word-by-word", "highlights": ["collab"], "captionPosition": 70 },
+    { "text": "Tự động hóa thiết kế", "startSec": 76.10, "endSec": 78.02, "style": "normal", "textEffect": "word-by-word", "highlights": ["Tự động"], "captionPosition": 70 },
+    { "text": "Tạo hình ảnh", "startSec": 78.44, "endSec": 79.98, "style": "normal", "textEffect": "word-by-word", "captionPosition": 70 },
+    { "text": "Tạo video để đăng content", "startSec": 79.98, "endSec": 83.64, "style": "normal", "textEffect": "word-by-word", "highlights": ["video"], "captionPosition": 70 },
+    { "text": "Đăng lên Facebook dễ dàng", "startSec": 83.64, "endSec": 87.96, "style": "solution", "textEffect": "word-by-word", "highlights": ["Facebook"], "captionPosition": 70 },
+
+    { "text": "Muốn hướng dẫn chi tiết?", "startSec": 87.96, "endSec": 89.66, "style": "cta", "textEffect": "typewriter", "highlights": ["chi tiết"], "captionPosition": 50 },
+    { "text": "Cài đặt và cách dùng từng cái", "startSec": 89.66, "endSec": 91.72, "style": "normal", "textEffect": "word-by-word", "captionPosition": 50 },
+    { "text": "Comment 'CLAUDE AI GIỎI NHẤT'", "startSec": 91.72, "endSec": 94.64, "style": "cta", "textEffect": "typewriter", "highlights": ["CLAUDE AI"], "captionPosition": 50 },
+    { "text": "Mình sẽ làm video hướng dẫn cho bạn", "startSec": 94.64, "endSec": 96.6, "style": "cta", "textEffect": "typewriter", "highlights": ["hướng dẫn"], "captionPosition": 50 }
+  ],
+  "soundEffects": [
+    { "audioPath": "media/sfx/SUDDEN SUSPENSE.mp3", "startSec": 0.3, "volume": 0.5, "durationSec": 1.5 },
+    { "audioPath": "media/sfx/Whoosh sound effect (1).mp3", "startSec": 15.0, "volume": 0.7, "durationSec": 1.2 },
+    { "audioPath": "media/sfx/Whoosh sound effect (1).mp3", "startSec": 25.0, "volume": 0.7, "durationSec": 1.2 },
+    { "audioPath": "media/sfx/Whoosh sound effect (1).mp3", "startSec": 37.6, "volume": 0.7, "durationSec": 1.2 },
+    { "audioPath": "media/sfx/Whoosh sound effect (1).mp3", "startSec": 51.3, "volume": 0.7, "durationSec": 1.2 },
+    { "audioPath": "media/sfx/Whoosh sound effect (1).mp3", "startSec": 69.8, "volume": 0.7, "durationSec": 1.2 },
+    { "audioPath": "media/sfx/ting.mp3", "startSec": 16.86, "volume": 0.5, "durationSec": 1.0 },
+    { "audioPath": "media/sfx/ting.mp3", "startSec": 27.54, "volume": 0.5, "durationSec": 1.0 },
+    { "audioPath": "media/sfx/ting.mp3", "startSec": 40.06, "volume": 0.5, "durationSec": 1.0 },
+    { "audioPath": "media/sfx/ting.mp3", "startSec": 53.64, "volume": 0.5, "durationSec": 1.0 },
+    { "audioPath": "media/sfx/ting.mp3", "startSec": 71.14, "volume": 0.5, "durationSec": 1.0 },
+    { "audioPath": "media/sfx/DUN DUN DUNNN.mp3", "startSec": 87.8, "volume": 0.5, "durationSec": 2.5 }
+  ],
+  "backgroundMusic": [
+    {
+      "audioPath": "media/bgm/chase-velocity.mp3",
+      "startSec": 0,
+      "endSec": 96.8,
+      "volume": 0.06,
+      "fadeInSec": 1,
+      "fadeOutSec": 2
+    }
+  ]
+}

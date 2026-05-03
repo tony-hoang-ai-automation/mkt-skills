@@ -1,0 +1,6 @@
+{
+  "_comment": "English-word -> Vietnamese-phonetic-spelling map. Whole-word match, case-insensitive. ElevenLabs sees the VN spelling and pronounces it close to the original English. Add words ONLY after confirming the model mispronounces them — overfitting will break things (e.g. adding 'code' will also rewrite 'Claude Code' the brand name). Curate by listening.",
+  "doc": "đóc",
+  "chat": "chát",
+  "git": "gít"
+}

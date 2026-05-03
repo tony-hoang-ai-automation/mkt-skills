@@ -1,0 +1,19 @@
+{
+  "skill_name": "mkt-full-video-with-11-hyperframe-heygen",
+  "evals": [
+    {
+      "id": 1,
+      "name": "happy-path-short-script",
+      "prompt": "Chạy full video pipeline cho script này:\n\n\"Hôm nay mình chia sẻ 1 thứ rất hay. Đó là Claude Code, phần mềm AI lập trình cực mạnh. Mỗi tối mình bật lên là code chạy ào ào. Anh em nào chưa thử thì thử ngay nhé. Đừng quên like và đăng ký kênh để xem nhiều content AI thú vị hơn.\"\n\nSlug: smoke-test-claude-code\n\nLƯU Ý: Đây là automated test run. Khi đến checkpoint MP3, tự động proceed như user đã reply 'OK' — KHÔNG dừng đợi user input. Chạy hết pipeline tới khi mở preview Studio.",
+      "expected_output": "Pipeline hoàn thành cả 3 phase. File outputs: workspace/content/<date>/smoke-test-claude-code/script.txt + voiceover.mp3 + source.mp4 + transcript.json + caption-groups.json + scenes.json + index.html + compositions/ + sfx/. Báo Studio URL.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "name": "script-too-long-fail-fast",
+      "prompt": "Chạy full video pipeline cho script (script đã prepare sẵn, dài cố tình > 5000 ký tự để test edge case):\n\n[SCRIPT_PLACEHOLDER]\n\nSlug: edge-case-too-long\n\nLƯU Ý: Đây là automated test run. Pipeline phải fail fast tại Step 0 với error rõ ràng yêu cầu user split script. KHÔNG được tiếp tục gọi ElevenLabs API.",
+      "expected_output": "Pipeline fail fast tại Step 0.4 (validate script length). Error message rõ ràng: script vượt 5000 ký tự, yêu cầu user split semantic. KHÔNG có voiceover.mp3 được tạo. KHÔNG burn ElevenLabs credits.",
+      "files": []
+    }
+  ]
+}

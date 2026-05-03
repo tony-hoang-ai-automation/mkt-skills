@@ -7,6 +7,8 @@ import { ImageKenBurns } from "./templates/ImageKenBurns";
 import { ProgressiveReduction } from "./templates/ProgressiveReduction";
 import { HeyGenShort } from "./templates/HeyGenShort";
 import { PromptTyping } from "./templates/PromptTyping";
+import { TikTokCreator } from "./templates/TikTokCreator";
+import { NewsShare } from "./templates/NewsShare";
 import type {
   DarkMinimalProps,
   BoldHighlightProps,
@@ -15,6 +17,8 @@ import type {
   ProgressiveReductionProps,
   HeyGenShortProps,
   PromptTypingProps,
+  TikTokCreatorProps,
+  NewsShareProps,
 } from "./types";
 
 const FPS = 30;
@@ -121,6 +125,32 @@ export const RemotionRoot: React.FC = () => {
           durationSeconds: 12,
         }}
       />
+      <Composition<TikTokCreatorProps>
+        id="TikTokCreator"
+        component={TikTokCreator}
+        fps={FPS}
+        width={1080}
+        height={1920}
+        durationInFrames={97 * FPS}
+        calculateMetadata={({ props }) => ({
+          durationInFrames: Math.round(props.durationSeconds * FPS),
+        })}
+        defaultProps={require("../props/tiktok-creator.json")}
+      />
+
+      <Composition<NewsShareProps>
+        id="NewsShare"
+        component={NewsShare}
+        fps={FPS}
+        width={1080}
+        height={1920}
+        durationInFrames={95 * FPS}
+        calculateMetadata={({ props }) => ({
+          durationInFrames: Math.round(props.durationSeconds * FPS),
+        })}
+        defaultProps={require("../props/news-share-vercel.json")}
+      />
+
       <Composition<HeyGenShortProps>
         id="HeyGenShort"
         component={HeyGenShort}

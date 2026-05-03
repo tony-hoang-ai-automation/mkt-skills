@@ -1,0 +1,309 @@
+<template id="fs-cta-template">
+  <div data-composition-id="fs-cta" data-start="0" data-width="1080" data-height="1920">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      [data-composition-id="fs-cta"] {
+        width: 100%;
+        height: 100%;
+        background: #141413;
+        color: #faf9f5;
+        position: relative;
+        overflow: hidden;
+        font-family: 'Be Vietnam Pro', 'Inter', Arial, sans-serif;
+      }
+      /* Background radial pulse glow */
+      [data-composition-id="fs-cta"] .bg-pulse {
+        position: absolute;
+        top: 50%; left: 50%;
+        width: 1200px; height: 1200px;
+        margin: -600px 0 0 -600px;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(217, 119, 87, 0.25) 0%, rgba(217, 119, 87, 0) 60%);
+        z-index: 0;
+        pointer-events: none;
+      }
+      /* Sparkle dots around pill */
+      [data-composition-id="fs-cta"] .sparkle {
+        position: absolute;
+        width: 14px; height: 14px;
+        background: #d97757;
+        border-radius: 50%;
+        z-index: 6;
+        pointer-events: none;
+        opacity: 0;
+        box-shadow: 0 0 12px rgba(217, 119, 87, 0.8);
+      }
+      /* 8 sparkles positioned around pill area (~top:48%, center) */
+      [data-composition-id="fs-cta"] .sparkle.s1 { top: 36%; left: 22%; }
+      [data-composition-id="fs-cta"] .sparkle.s2 { top: 32%; left: 50%; }
+      [data-composition-id="fs-cta"] .sparkle.s3 { top: 36%; left: 78%; }
+      [data-composition-id="fs-cta"] .sparkle.s4 { top: 50%; left: 18%; width: 10px; height: 10px; }
+      [data-composition-id="fs-cta"] .sparkle.s5 { top: 50%; left: 82%; width: 10px; height: 10px; }
+      [data-composition-id="fs-cta"] .sparkle.s6 { top: 64%; left: 24%; }
+      [data-composition-id="fs-cta"] .sparkle.s7 { top: 62%; left: 50%; }
+      [data-composition-id="fs-cta"] .sparkle.s8 { top: 64%; left: 76%; }
+
+      /* Particles floating up from bottom */
+      [data-composition-id="fs-cta"] .particle {
+        position: absolute;
+        width: 6px; height: 6px;
+        background: #d97757;
+        border-radius: 50%;
+        z-index: 1;
+        pointer-events: none;
+        opacity: 0;
+      }
+      [data-composition-id="fs-cta"] .particle.p1 { left: 15%; }
+      [data-composition-id="fs-cta"] .particle.p2 { left: 28%; }
+      [data-composition-id="fs-cta"] .particle.p3 { left: 42%; }
+      [data-composition-id="fs-cta"] .particle.p4 { left: 58%; }
+      [data-composition-id="fs-cta"] .particle.p5 { left: 72%; }
+      [data-composition-id="fs-cta"] .particle.p6 { left: 85%; }
+
+      [data-composition-id="fs-cta"] .scene-content {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        padding: 240px 80px 360px;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        z-index: 2;
+      }
+      [data-composition-id="fs-cta"] .fs-eyebrow {
+        font-weight: 600;
+        font-size: 32px;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        color: #d97757;
+        margin-bottom: 18px;
+      }
+      [data-composition-id="fs-cta"] .fs-title {
+        font-weight: 800;
+        font-size: 110px;
+        line-height: 1.1;
+        letter-spacing: -0.02em;
+        margin: 0 0 18px;
+      }
+      [data-composition-id="fs-cta"] .cursor {
+        display: inline-block;
+        width: 6px;
+        height: 1em;
+        background: #d97757;
+        margin-left: 8px;
+        vertical-align: -0.1em;
+      }
+      [data-composition-id="fs-cta"] .fs-pill {
+        display: inline-block;
+        padding: 10px 38px;
+        border-radius: 24px;
+        background: #d97757;
+        color: #141413;
+        font-weight: 800;
+        letter-spacing: -0.01em;
+        position: relative;
+      }
+      /* Ripple ring around pill */
+      [data-composition-id="fs-cta"] .pill-wrap {
+        display: inline-block;
+        position: relative;
+      }
+      [data-composition-id="fs-cta"] .pill-ripple {
+        position: absolute;
+        top: 0; left: 0; right: 0; bottom: 0;
+        border-radius: 24px;
+        border: 3px solid #d97757;
+        pointer-events: none;
+        opacity: 0;
+      }
+      [data-composition-id="fs-cta"] .fs-arrow {
+        font-size: 110px;
+        line-height: 0.9;
+        color: #d97757;
+        margin-top: 4px;
+      }
+      [data-composition-id="fs-cta"] .fs-sub {
+        font-style: italic;
+        font-weight: 500;
+        font-size: 36px;
+        line-height: 1.35;
+        max-width: 800px;
+        opacity: 0.86;
+        margin-top: 18px;
+      }
+    </style>
+
+    <div class="bg-pulse"></div>
+
+    <div class="sparkle s1"></div>
+    <div class="sparkle s2"></div>
+    <div class="sparkle s3"></div>
+    <div class="sparkle s4"></div>
+    <div class="sparkle s5"></div>
+    <div class="sparkle s6"></div>
+    <div class="sparkle s7"></div>
+    <div class="sparkle s8"></div>
+
+    <div class="particle p1"></div>
+    <div class="particle p2"></div>
+    <div class="particle p3"></div>
+    <div class="particle p4"></div>
+    <div class="particle p5"></div>
+    <div class="particle p6"></div>
+
+    <div class="scene-content">
+      <div class="fs-eyebrow">Muốn học Claude Code?</div>
+      <h1 class="fs-title">
+        Comment<span class="cursor"></span><br />
+        <span class="pill-wrap">
+          <span class="fs-pill">CODE</span>
+          <span class="pill-ripple"></span>
+        </span>
+      </h1>
+      <div class="fs-arrow">↓</div>
+      <div class="fs-sub">Mình gửi tutorial áp dụng AI<br />vào công việc và doanh nghiệp</div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+      const ROOT = '[data-composition-id="fs-cta"]';
+
+      // Big punch-zoom entrance
+      tl.from(ROOT + ' .scene-content', {
+        scale: 1.18, opacity: 0, duration: 0.5, ease: "back.out(1.6)",
+      }, 0);
+
+      // Background radial pulse fade in
+      tl.from(ROOT + ' .bg-pulse', {
+        opacity: 0, scale: 0.6, duration: 0.9, ease: "power2.out",
+      }, 0.1);
+
+      // Eyebrow + Comment label
+      tl.from(ROOT + ' .fs-eyebrow', {
+        y: -22, opacity: 0, duration: 0.5, ease: "power3.out",
+      }, 0.25);
+      tl.from(ROOT + ' .fs-title', {
+        y: 50, opacity: 0, duration: 0.6, ease: "back.out(1.4)",
+      }, 0.4);
+
+      // Cursor blink (~2Hz, 4 cycles before pill appears)
+      const cursorCycle = 0.5;
+      tl.set(ROOT + ' .cursor', { opacity: 1 }, 0.6);
+      tl.to(ROOT + ' .cursor', {
+        opacity: 0,
+        duration: cursorCycle / 2,
+        ease: "steps(1)",
+        yoyo: true,
+        repeat: 3,
+      }, 0.6);
+
+      // Pill slam-in after cursor blinks
+      tl.from(ROOT + ' .fs-pill', {
+        scale: 0.4, opacity: 0, rotation: -6,
+        duration: 0.55, ease: "back.out(1.8)",
+      }, 1.1);
+      // Cursor disappears when pill arrives
+      tl.to(ROOT + ' .cursor', { opacity: 0, duration: 0.1 }, 1.1);
+
+      // Sparkles burst around pill (4 stagger waves)
+      tl.from(ROOT + ' .sparkle', {
+        scale: 0, opacity: 0,
+        duration: 0.5, ease: "back.out(2)",
+        stagger: { each: 0.04, from: "random" },
+      }, 1.2);
+      // Sparkles set to base opacity
+      tl.set(ROOT + ' .sparkle', { opacity: 0.9 }, 1.65);
+
+      // Arrow + sub
+      tl.from(ROOT + ' .fs-arrow', {
+        y: -30, opacity: 0, duration: 0.45, ease: "power3.out",
+      }, 1.4);
+      tl.from(ROOT + ' .fs-sub', {
+        y: 22, opacity: 0, duration: 0.5, ease: "power2.out",
+      }, 1.55);
+
+      // ===== AMBIENT EFFECTS (1.7s → 7.94s) =====
+
+      // 1) Bouncing arrow loop
+      const arrowCycle = 1.0;
+      const arrowDur = 6.0;
+      const arrowRepeats = Math.max(1, Math.ceil(arrowDur / arrowCycle) - 1);
+      tl.to(ROOT + ' .fs-arrow', {
+        y: 18,
+        duration: arrowCycle / 2,
+        ease: "sine.inOut",
+        yoyo: true,
+        repeat: arrowRepeats,
+      }, 1.9);
+
+      // 2) Pill scale pulse
+      const pillCycle = 1.4;
+      const pillDur = 6.0;
+      const pillRepeats = Math.max(1, Math.ceil(pillDur / pillCycle) - 1);
+      tl.to(ROOT + ' .fs-pill', {
+        scale: 1.06,
+        duration: pillCycle / 2,
+        ease: "sine.inOut",
+        yoyo: true,
+        repeat: pillRepeats,
+      }, 1.9);
+
+      // 3) Pill ripple expanding outward (3 cycles)
+      [0, 1.0, 2.0].forEach((delay, idx) => {
+        tl.fromTo(ROOT + ' .pill-ripple',
+          { scale: 1, opacity: 0.7 },
+          { scale: 1.6, opacity: 0, duration: 1.2, ease: "power2.out" },
+          2.0 + delay
+        );
+      });
+
+      // 4) Background pulse continuous breath
+      const bgCycle = 1.8;
+      const bgRepeats = Math.max(1, Math.ceil(5.5 / bgCycle) - 1);
+      tl.to(ROOT + ' .bg-pulse', {
+        opacity: 0.6,
+        duration: bgCycle / 2,
+        ease: "sine.inOut",
+        yoyo: true,
+        repeat: bgRepeats,
+      }, 2.0);
+
+      // 5) Sparkles twinkle (random opacity flicker)
+      const sparkleCycle = 0.9;
+      const sparkleRepeats = Math.max(1, Math.ceil(5.5 / sparkleCycle) - 1);
+      tl.to(ROOT + ' .sparkle', {
+        opacity: 0.3,
+        duration: sparkleCycle / 2,
+        ease: "sine.inOut",
+        yoyo: true,
+        repeat: sparkleRepeats,
+        stagger: { each: 0.08, from: "random" },
+      }, 2.0);
+
+      // 6) Particles float up from bottom (6 particles, looping)
+      [0, 0.4, 0.8, 1.2, 1.6, 2.0].forEach((delay, i) => {
+        const sel = ROOT + ' .particle.p' + (i + 1);
+        const cycleDur = 2.5;
+        const cycleRepeats = Math.max(1, Math.ceil(5.5 / cycleDur) - 1);
+        tl.fromTo(sel,
+          { y: 0, opacity: 0.8 },
+          { y: -1400, opacity: 0, duration: cycleDur, ease: "power1.out", repeat: cycleRepeats },
+          1.8 + delay
+        );
+      });
+
+      window.__timelines["fs-cta"] = tl;
+    </script>
+  </div>
+</template>

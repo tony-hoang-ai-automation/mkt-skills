@@ -1,0 +1,12 @@
+{
+  "eval_id": 2,
+  "eval_name": "script-too-long-fail-fast",
+  "prompt": "Chạy full video pipeline với script > 5000 ký tự (đã prepare ở /tmp/long_script.txt). Pipeline phải fail fast tại Step 0.",
+  "assertions": [
+    {"text": "Pipeline detect script length > 5000 ký tự", "category": "validation"},
+    {"text": "KHÔNG gọi ElevenLabs API (không tốn credits)", "category": "fail-fast"},
+    {"text": "KHÔNG tạo voiceover.mp3", "category": "fail-fast"},
+    {"text": "Error message rõ ràng — báo user split script semantic", "category": "error-handling"},
+    {"text": "Stop tại Step 0 — không tiếp tục Phase 2/3", "category": "fail-fast"}
+  ]
+}

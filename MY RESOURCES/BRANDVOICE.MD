@@ -155,13 +155,49 @@
 
 ---
 
-## **Power Words (Từ khoá sức mạnh)**
+## **Nguyên tắc dùng tiếng Anh (Quan trọng)**
 
-**Giữ nguyên tiếng Anh:**
+**Nguyên tắc vàng:** Hạn chế tối đa từ tiếng Anh trong nội dung. Ưu tiên diễn đạt bằng tiếng Việt để học sinh lớp 5 đọc cũng hiểu. Chỉ giữ tiếng Anh với 3 nhóm dưới đây — **ngoài ra đều phải dịch**.
 
+### **Nhóm được phép giữ nguyên tiếng Anh:**
+
+**1. Power Words thương hiệu (brand-specific):**
 System, Automation, One Person, AI, Framework, Workflow, No-code, Prompt, Template, Step-by-step, Scale
 
-**Tiếng Việt:**
+**2. Tên riêng:**
+- Tên người (Brendan Kane, Mr Beast, Taylor Swift...)
+- Tên sản phẩm / công cụ (Claude Code, Notion, ChatGPT, YouTube, TikTok, Facebook, Reels, Shorts...)
+- Tên khoá học / cộng đồng (MIV mùa 6, AI Freedom Builders...)
+
+**3. Viết tắt phổ biến đã Việt hoá:**
+AI, API, MP3, CTA, SEO, KPI, ROI, PDF... (những từ viết tắt mà 80%+ người Việt đã quen)
+
+### **Các từ BẮT BUỘC phải dịch sang tiếng Việt:**
+
+| Tiếng Anh | Tiếng Việt |
+|---|---|
+| content creator | người làm nội dung / người làm video |
+| format | công thức / cách làm / cách kể |
+| copy | bắt chước / sao chép |
+| highlight | gạch chân / tô đậm |
+| note | ghi chú |
+| context | bối cảnh / cách thể hiện |
+| views | lượt xem |
+| followers | người theo dõi |
+| reactions | phản ứng / nét mặt |
+| captions | phụ đề / chữ hiện trên màn hình |
+| pacing | nhịp (nhanh/chậm) |
+| case study | ví dụ thực tế |
+| research | tìm hiểu / nghiên cứu |
+| business | công việc / việc kinh doanh |
+| wisdom | bài học |
+| camera | máy quay |
+| process | quy trình / cách làm |
+| cross-analyze | so sánh chéo / đặt cạnh nhau soi |
+| skill | kỹ năng / bộ công cụ |
+| agent | trợ lý (AI) |
+
+### **Từ tiếng Việt tương đương các khái niệm thương hiệu:**
 
 - Hệ thống / Tự động hoá / Chuyển đổi số / AI hoá
 - Một người vận hành / Không cần team
@@ -169,6 +205,12 @@ System, Automation, One Person, AI, Framework, Workflow, No-code, Prompt, Templa
 - Thực chiến / Áp dụng ngay / Kết quả đo được
 - Quy trình / Hệ thống hoá / Kiểm soát từ A–Z
 - Miễn phí / Đơn giản / Ai cũng làm được
+
+### **Checklist trước khi post:**
+
+- [ ] Đọc to lên — nếu phải "dịch ngầm" từ tiếng Anh trong đầu khi đọc → thay bằng tiếng Việt
+- [ ] Học sinh lớp 5 đọc có hiểu không? Nếu không → đơn giản hoá
+- [ ] Các từ Anh xuất hiện có nằm trong 3 nhóm được phép không? Nếu không → dịch
 
 ---
 

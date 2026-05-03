@@ -66,7 +66,7 @@ def run_actor(pages: list[str], date_from: str, min_likes: int) -> list[dict]:
         f"{APIFY_BASE}/acts/{ACTOR_ID}/runs",
         headers=headers,
         params=params,
-        json={"input": input_data},
+        json=input_data,
         timeout=30,
     )
     resp.raise_for_status()
