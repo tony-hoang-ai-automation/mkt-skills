@@ -5,10 +5,9 @@
 # ///
 """Download a finished HeyGen video URL to a local MP4 path.
 
-This is a plain HTTPS download of a URL HeyGen returned via its MCP
-get_avatar_video_status response — it does NOT call any HeyGen REST
-API to create or modify videos, so it does not violate the skill's
-"MCP only for video creation" constraint.
+This is a plain HTTPS download of the URL HeyGen returned via
+mcp__heygen__get_video (or GET /v3/videos/{id}) — it does NOT call any
+HeyGen API to create or modify videos.
 
 Usage:
   python download_video.py <video_url> <output_path>

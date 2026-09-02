@@ -48,20 +48,22 @@ Only include avatar segments. Replace avatar IDs if user provided custom ones.
 
 **IMPORTANT: Use audioAssetId for lip-sync — NOT script+voiceId (TTS).**
 
-Upload each chunk MP3 **in parallel**:
+Upload each chunk MP3 **in parallel** (v3 assets endpoint — the old
+`upload.heygen.com/v1/asset` is legacy and sunsets 2026-10-31):
 ```bash
-curl -X POST "https://upload.heygen.com/v1/asset" \
+curl -X POST "https://api.heygen.com/v3/assets" \
   -H "X-Api-Key: $HEYGEN_API_KEY" \
-  -H "Content-Type: audio/mpeg" \
-  --data-binary @"<chunk_path>"
+  -F "file=@<chunk_path>;type=audio/mpeg"
+# → data.asset_id
 ```
 
 Create video with `audioAssetId` **in parallel** (submit all chunks concurrently):
 ```
-mcp__heygen__create_video:
+mcp__heygen__create_video_from_avatar:
   avatarId: chunk.avatar_id
   audioAssetId: <uploaded_asset_id>
   aspectRatio: "9:16"
+  resolution: "720p"
   title: "chunk_{index}"
 ```
 

@@ -53,26 +53,36 @@ Only include avatar segments. Replace avatar IDs if user provided custom ones.
 
 **MUST use HeyGen MCP tools — NEVER use curl for video creation or polling.**
 
-### 3a: Upload audio chunks (curl — no MCP tool for asset upload)
+### 3a: Upload audio chunks (REST `POST /v3/assets` — no MCP tool for asset upload)
 
 Upload each chunk MP3 **in parallel**:
 ```bash
-curl -X POST "https://upload.heygen.com/v1/asset" \
+curl -X POST "https://api.heygen.com/v3/assets" \
   -H "X-Api-Key: $HEYGEN_API_KEY" \
-  -H "Content-Type: audio/mpeg" \
-  --data-binary @"<chunk_path>"
+  -F "file=@<chunk_path>;type=audio/mpeg"
+# → {"data":{"asset_id":"…","url":"…","mime_type":"audio/mpeg","size_bytes":…}}
 ```
+
+Take `data.asset_id`. The old `POST https://upload.heygen.com/v1/asset` (raw body,
+response `data.id`) is a **legacy v1 endpoint — sunset 2026-10-31**; do not use it.
+Reusable helper: `.claude/skills/heygen-mp3-to-mp4/scripts/upload_asset.py`.
 
 ### 3b: Create avatar videos via MCP (submit all chunks in parallel)
 
-Use `mcp__heygen__create_avatar_video` MCP tool for EACH chunk:
+Use `mcp__heygen__create_video_from_avatar` MCP tool for EACH chunk:
 ```
-mcp__heygen__create_avatar_video:
+mcp__heygen__create_video_from_avatar:
   avatarId: "<chunk.avatar_id>"
   audioAssetId: "<uploaded_asset_id>"
   aspectRatio: "9:16"
+  resolution: "720p"
   title: "chunk_{index}"
 ```
+
+If that tool name is not exposed, list the session's `mcp__heygen__*` tools before
+guessing — HeyGen renamed them in the 2026 MCP reshape (`generate_avatar_video`,
+`get_avatar_video_status`, `upload_asset` are gone). REST fallback (v3, never v2):
+`.claude/skills/heygen-mp3-to-mp4/scripts/create_video.py`.
 
 Key parameters:
 - `avatarId` — from default look IDs or user-specified

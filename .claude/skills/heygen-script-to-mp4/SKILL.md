@@ -1,6 +1,6 @@
 ---
 name: heygen-script-to-mp4
-description: Convert a script (Vietnamese or English text) directly into a single HeyGen avatar video — HeyGen handles TTS using the locked ElevenLabs voice, then lip-syncs the avatar. Single-purpose — no MP3 generation, no SRT, no chunking, no Remotion. Uses HeyGen MCP tools exclusively (no direct REST API calls). Avatar look and voice ID are fixed allowlists. USE WHEN user says "tạo video heygen từ script", "script to heygen", "heygen mp4 từ text", "convert script sang heygen video", "tạo avatar video từ script", "heygen text to video", "biến script thành video heygen", or any time the user has script text (not an MP3) and wants exactly one HeyGen avatar MP4 out.
+description: Convert a script (Vietnamese or English text) directly into a single HeyGen avatar video — HeyGen handles TTS using the locked ElevenLabs voice, then lip-syncs the avatar. Single-purpose — no MP3 generation, no SRT, no chunking, no Remotion. Uses HeyGen MCP tools exclusively (no direct REST API calls). Avatar look pool (`HEYGEN_AVATAR_LOOKS`) and voice ID (`HEYGEN_VOICE_ID`) are read from `.env`. USE WHEN user says "tạo video heygen từ script", "script to heygen", "heygen mp4 từ text", "convert script sang heygen video", "tạo avatar video từ script", "heygen text to video", "biến script thành video heygen", or any time the user has script text (not an MP3) and wants exactly one HeyGen avatar MP4 out.
 ---
 
 # HeyGen Script → MP4 (Single-Purpose, TTS path)
@@ -11,7 +11,7 @@ This is the **TTS sister** of `heygen-mp3-to-mp4`:
 
 | Skill | Input | Voice path |
 |---|---|---|
-| `heygen-mp3-to-mp4` | pre-recorded MP3 | `voice.type = audio` + `audio_asset_id` |
+| `heygen-mp3-to-mp4` | pre-recorded MP3 | `audioAssetId` (upload qua `POST /v3/assets`) |
 | `heygen-script-to-mp4` (this) | script text | `voice.type = text` + `voice_id` |
 
 The two paths are mutually exclusive — picking this skill means **no MP3 step at all**; HeyGen runs TTS internally using the locked voice ID.
@@ -20,9 +20,9 @@ The two paths are mutually exclusive — picking this skill means **no MP3 step 
 
 | Constraint | Allowed values |
 |---|---|
-| HeyGen video creation | **HeyGen MCP only.** Never call HeyGen REST API directly via curl/requests. |
-| Avatar look ID | One of: `ff800d7f76aa48f5a23eb6a742ed5365`, `66e75e22e6584bbdaa56a19088286dc8` |
-| Voice ID | **Exactly** `fe3f902be2884d1b86ec49c255b3a287`. No other voice ID is permitted under any circumstance. |
+| HeyGen video creation | **HeyGen MCP first** (`mcp__heygen__create_video_from_avatar`). REST fallback only via `.claude/skills/heygen-mp3-to-mp4/scripts/create_video.py`, which speaks **v3** (`POST /v3/videos`). Never call v1/v2 endpoints — they sunset 2026-10-31. |
+| Avatar look ID | One of the IDs in `HEYGEN_AVATAR_LOOKS` env var (comma-separated allowlist in `.env`). |
+| Voice ID | **Exactly** `HEYGEN_VOICE_ID` from `.env`. No other voice ID is permitted under any circumstance. |
 | Script length | ≤ 1500 characters per video (HeyGen TTS soft cap). Fail fast if longer. |
 | Aspect ratio | 9:16 default (TikTok / Reels) |
 
@@ -50,34 +50,38 @@ Show the user the cleaned script (first ~200 chars + `...` if longer) before con
 
 ### 2. Pick the avatar look
 
-```python
-import random
-AVATAR_LOOKS = ["ff800d7f76aa48f5a23eb6a742ed5365", "66e75e22e6584bbdaa56a19088286dc8"]
-avatar_id = random.choice(AVATAR_LOOKS)
+Read `HEYGEN_AVATAR_LOOKS` from project `.env` (comma-separated allowlist). Random pick one:
+
+```bash
+# Extract pool from .env, comma-split, random pick
+HEYGEN_AVATAR_LOOKS=$(grep '^HEYGEN_AVATAR_LOOKS=' .env | cut -d'=' -f2- | tr -d '"' | tr -d "'")
+echo "$HEYGEN_AVATAR_LOOKS" | tr ',' '\n' | awk 'BEGIN{srand()} {a[NR]=$0} END{print a[int(rand()*NR)+1]}'
 ```
 
-If user named a look, validate it is in the allowlist. Tell the user which look you picked before continuing.
+If user named a look, validate it is in the `HEYGEN_AVATAR_LOOKS` allowlist. If the env var is missing or empty, stop and tell the user to add `HEYGEN_AVATAR_LOOKS=<id1>,<id2>` to `.env`. Tell the user which look you picked before continuing.
+
+## API version policy
+
+**v3 only.** HeyGen's v1/v2 endpoints answer with `deprecation: true` + `sunset: Sat, 31 Oct 2026 00:00:00 GMT`
+and are retired on 2026-11-01. Never call `POST /v2/video/generate`, `GET /v1/video_status.get`, or
+`POST https://upload.heygen.com/v1/asset`. Current: `POST /v3/videos` · `GET /v3/videos/{id}` ·
+`POST /v3/assets` · `GET /v3/users/me`. The MCP tools already route to v3 — see
+`.claude/skills/heygen-mp3-to-mp4/references/api-versions.md`.
 
 ### 3. Generate the avatar video
 
-Call the HeyGen MCP video-creation tool — canonical name **`generate_avatar_video`** (exposed as `mcp__heygen__generate_avatar_video` in the session). Required shape:
+Call the HeyGen MCP video-creation tool — canonical name **`create_video_from_avatar`** (exposed as `mcp__heygen__create_video_from_avatar`). The pre-2026 name `generate_avatar_video` and the nested `character` / `voice` / `dimension` shape are **gone**; the current input is flat with `aspectRatio` + `resolution` enums:
 
 ```
-character:
-  type: avatar
-  avatar_id: <picked from allowlist>
-  scale: 1.0
-voice:
-  type: text
-  input_text: <cleaned script>
-  voice_id: fe3f902be2884d1b86ec49c255b3a287
-dimension:
-  width: 720
-  height: 1280     # 9:16
-title: "<slug>-<timestamp>"
+avatarId:    <picked from allowlist>
+script:      <cleaned script>
+voiceId:     <HEYGEN_VOICE_ID from .env>
+aspectRatio: "9:16"
+resolution:  "720p"        # → 720×1280
+title:       "<slug>-<timestamp>"
 ```
 
-Capture the returned `video_id`.
+If the tool is missing from the session, list the exposed `mcp__heygen__*` tools first (OAuth may be incomplete — see `heygen-mp3-to-mp4` Step 0). Capture the returned `video_id`.
 
 **Why voice type = text (not audio):** TTS happens inside HeyGen using the locked voice. Sending an `audio_asset_id` here would tell HeyGen to use pre-recorded audio instead, defeating the purpose of this skill.
 
@@ -85,9 +89,9 @@ Capture the returned `video_id`.
 
 ### 4. Poll until completed
 
-Call **`get_avatar_video_status`** every ~10 seconds with the `video_id`:
+Call **`mcp__heygen__get_video`** every ~10 seconds with the `video_id` (the old `get_avatar_video_status` name is gone):
 
-- `processing` / `pending` → keep polling
+- `waiting` / `processing` / `pending` → keep polling
 - `completed` → grab `video_url` from the response and proceed
 - `failed` → stop, show the error to the user
 
@@ -103,7 +107,7 @@ Download via the helper:
 uv run .claude/skills/heygen-script-to-mp4/scripts/download_video.py "<video_url>" "<output_path>"
 ```
 
-This is a plain HTTPS download of the URL HeyGen returned — not an API call to create or modify a video — so it does not violate the MCP-only constraint.
+This is a plain HTTPS download of the URL HeyGen returned — not an API call to create or modify a video.
 
 ### 6. Report back
 
@@ -125,9 +129,9 @@ User: `tạo video heygen từ script: "Hôm nay mình chia sẻ 3 cách dùng C
 
 You:
 1. `check_script.py` → `OK 86 hom-nay-minh-chia-se-3`
-2. Random pick: `ff800d7f76aa48f5a23eb6a742ed5365`. Say so.
-3. `mcp__heygen__generate_avatar_video` (avatar + text + locked voice_id, 720×1280) → `video_id: v_yyy`
-4. Poll `mcp__heygen__get_avatar_video_status` every 10s until `completed` → `video_url`
+2. Random pick from `HEYGEN_AVATAR_LOOKS` (e.g. `ff800d7f76aa48f5a23eb6a742ed5365`). Say so.
+3. `mcp__heygen__create_video_from_avatar` (avatar + script + locked voiceId, aspectRatio 9:16 / resolution 720p) → `video_id: v_yyy`
+4. Poll `mcp__heygen__get_video` every 10s until `completed` → `video_url`
 5. `download_video.py <url> workspace/heygen-clips/hom-nay-minh-chia-se-3/hom-nay-minh-chia-se-3_20260429-143022.mp4`
 6. Report path, look, char count + ~9s estimated duration, size.
 
@@ -150,5 +154,5 @@ For a long script that needs chunking, suggest: `mkt-video-script-to-mp3` (TTS t
 | Script > 1500 chars | `Script <X> ký tự, vượt ~1500 ký tự khuyến nghị cho 1 video HeyGen TTS. Tách nhỏ hoặc dùng pipeline mp3.` |
 | HeyGen MCP not connected | `HeyGen MCP chưa kết nối. Chạy: claude mcp list để kiểm tra.` |
 | HeyGen returns failed | `HeyGen render failed: <error>. Có thể voice_id sai hoặc script chứa ký tự HeyGen không xử lý được.` |
-| Out of credits | `Hết credit HeyGen. Check qua mcp__heygen__get_remaining_credits.` |
+| Out of credits | `Hết credit HeyGen.` MCP/OAuth dùng subscription credits; REST fallback dùng API wallet — check `GET /v3/users/me`, nạp tại https://app.heygen.com/billing. |
 | User asks for a different voice | `Skill này khoá voice_id. Nếu cần voice khác, dùng heygen-mp3-to-mp4 với MP3 đã được TTS bằng voice mong muốn từ trước.` |
